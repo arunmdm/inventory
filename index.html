@@ -742,18 +742,31 @@
                     body: JSON.stringify(payload),
                 });
 
-                const result = await response.json();
+                // Check if the HTTP response itself was successful (status 200-299)
+                if (!response.ok) {
+                    let errorMessage = `HTTP error! Status: ${response.status}`;
+                    try {
+                        const errorText = await response.text(); // Try to get response text for more details
+                        errorMessage += ` - Details: ${errorText}`;
+                    } catch (e) {
+                        // If response.text() fails, just use the status
+                    }
+                    console.error("Server responded with an error:", errorMessage);
+                    return { success: false, message: `Server error: ${errorMessage}` };
+                }
+
+                const result = await response.json(); // Parse JSON only if response was OK
+
                 if (result.success) {
                     console.log("Google Apps Script response:", result.message);
                 } else {
-                    console.error("Error from Google Apps Script:", result.message);
-                    // alert("An error occurred: " + result.message); // Removed alert for more controlled feedback
+                    console.error("Error from Google Apps Script (application level):", result.message);
                 }
                 return result; // Return the result for login handling
             } catch (error) {
                 console.error("Network or fetch error:", error);
-                // alert("Failed to connect to the server. Please check your internet connection or try again later."); // Removed alert
-                return { success: false, message: "Network error. Please check console for details." };
+                // Provide a more user-friendly message for network issues
+                return { success: false, message: `Network error: Could not connect to the server. Please check your internet connection or the Web App URL. (Details: ${error.message})` };
             }
         }
 
@@ -1228,7 +1241,7 @@
             } catch (error) {
                 console.error("Login network error:", error);
                 loginError.classList.remove('hidden');
-                loginError.textContent = "Could not connect to the server. Please check your internet connection and the Web App URL.";
+                loginError.textContent = "Could not connect to the server. Please check your internet connection and the Web App URL. (Details: " + error.message + ")";
             } finally {
                 loginButton.disabled = false; // Re-enable button
             }
