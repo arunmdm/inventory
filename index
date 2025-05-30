@@ -1,0 +1,612 @@
+<!DOCTYPE html>
+<html>
+<head>
+<base target="_top">
+<title>MIT Nuclear Sample Management System</title>
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  body {
+    font-family: 'Roboto', sans-serif;
+    margin: 20px;
+    background-color: #f4f7f6;
+    color: #333;
+    line-height: 1.6;
+  }
+  .container {
+    max-width: 900px;
+    margin: 20px auto;
+    background-color: #ffffff;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  }
+  h1, h2, h3 {
+    color: #0056b3;
+    text-align: center;
+    margin-bottom: 25px;
+  }
+  .form-section {
+    border: 1px solid #e0e0e0;
+    border-radius: 5px;
+    padding: 20px;
+    margin-bottom: 30px;
+    background-color: #fdfdfd;
+  }
+  .form-section h3 {
+    background-color: #e9ecef;
+    padding: 10px;
+    margin: -20px -20px 20px -20px;
+    border-bottom: 1px solid #e0e0e0;
+    border-radius: 5px 5px 0 0;
+    color: #0056b3;
+    font-size: 1.2em;
+  }
+  label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: bold;
+    color: #555;
+  }
+  input[type="text"],
+  input[type="email"],
+  input[type="tel"],
+  input[type="date"],
+  input[type="number"],
+  select,
+  textarea {
+    width: calc(100% - 22px);
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+    font-size: 1em;
+  }
+  input[type="checkbox"] {
+    margin-right: 10px;
+  }
+  .checkbox-group label {
+    display: inline-block;
+    margin-right: 15px;
+    font-weight: normal;
+  }
+  .add-button, .remove-button, .submit-button {
+    background-color: #28a745;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1em;
+    margin-top: 10px;
+    transition: background-color 0.3s ease;
+  }
+  .add-button:hover, .submit-button:hover {
+    background-color: #218838;
+  }
+  .remove-button {
+    background-color: #dc3545;
+  }
+  .remove-button:hover {
+    background-color: #c82333;
+  }
+  .sample-item, .experiment-item, .composition-item, .dimension-item {
+    border: 1px dashed #cce5ff;
+    background-color: #e7f5ff;
+    padding: 15px;
+    margin-bottom: 15px;
+    border-radius: 5px;
+  }
+  .sample-item h4 {
+    margin-top: 0;
+    color: #0056b3;
+    font-size: 1.1em;
+  }
+  .sample-item .remove-button {
+    float: right;
+  }
+  .loading-spinner {
+    display: none; /* Hidden by default */
+    border: 4px solid rgba(0, 0, 0, 0.1);
+    border-left: 4px solid #0056b3;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    animation: spin 1s linear infinite;
+    margin: 10px auto;
+  }
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+  .message {
+    padding: 10px;
+    margin-top: 20px;
+    border-radius: 4px;
+    text-align: center;
+    font-weight: bold;
+  }
+  .message.success {
+    background-color: #d4edda;
+    color: #155724;
+    border-color: #c3e6cb;
+  }
+  .message.error {
+    background-color: #f8d7da;
+    color: #721c24;
+    border-color: #f5c6cb;
+  }
+  .tab-buttons {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  .tab-button {
+    background-color: #007bff;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1.1em;
+    margin: 0 5px;
+    transition: background-color 0.3s ease;
+  }
+  .tab-button:hover {
+    background-color: #0056b3;
+  }
+  .tab-button.active {
+    background-color: #0056b3;
+    border-bottom: 3px solid #f8f9fa;
+  }
+  .tab-content {
+    display: none;
+  }
+  .tab-content.active {
+    display: block;
+  }
+  .two-column-layout {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px; /* Space between columns */
+  }
+  .two-column-layout > div {
+    flex: 1; /* Each column takes equal width */
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+  <h1>MIT Nuclear Sample Management System</h1>
+
+  <div class="tab-buttons">
+    <button class="tab-button active" onclick="openTab('sampleRequest')">Sample Request</button>
+    <button class="tab-button" onclick="openTab('trackingUpdate')">Tracking Update</button>
+    <button class="tab-button" onclick="openTab('dataRequest')">Data Request</button>
+  </div>
+
+  <div id="sampleRequest" class="tab-content active form-section">
+    <h3>Sample Request Form</h3>
+    <form id="sampleRequestForm">
+      <div class="two-column-layout">
+        <div>
+          <label for="lotNumber">Lot Number:</label>
+          <input type="text" id="lotNumber" name="lotNumber" required>
+
+          <label for="collaboratorName">Collaborator Name:</label>
+          <input type="text" id="collaboratorName" name="collaboratorName" required>
+
+          <label for="collaboratorEmail">Collaborator Email:</label>
+          <input type="email" id="collaboratorEmail" name="collaboratorEmail" required>
+        </div>
+        <div>
+          <label for="collaboratorCompany">Collaborator Company:</label>
+          <input type="text" id="collaboratorCompany" name="collaboratorCompany" required>
+
+          <label for="collaboratorPhone">Collaborator Phone (Optional):</label>
+          <input type="tel" id="collaboratorPhone" name="collaboratorPhone">
+        </div>
+      </div>
+
+      <div id="samplesContainer">
+        <h4>Sample Details</h4>
+        </div>
+      <button type="button" class="add-button" onclick="addSample()">Add Sample</button>
+
+      <label for="generalSpecialInstructions">General Special Instructions for Lot (Optional):</label>
+      <textarea id="generalSpecialInstructions" name="generalSpecialInstructions" rows="4"></textarea>
+
+      <button type="submit" class="submit-button">Submit Sample Request</button>
+      <div class="loading-spinner" id="sampleRequestSpinner"></div>
+      <div id="sampleRequestMessage" class="message"></div>
+    </form>
+  </div>
+
+  <div id="trackingUpdate" class="tab-content form-section">
+    <h3>Tracking Number Update</h3>
+    <form id="trackingUpdateForm">
+      <label for="updateLotNumber">Lot Number to Update:</label>
+      <input type="text" id="updateLotNumber" name="updateLotNumber" required>
+
+      <label for="trackingNumber">Tracking Number:</label>
+      <input type="text" id="trackingNumber" name="trackingNumber" required>
+
+      <button type="submit" class="submit-button">Update Tracking Info</button>
+      <div class="loading-spinner" id="trackingUpdateSpinner"></div>
+      <div id="trackingUpdateMessage" class="message"></div>
+    </form>
+  </div>
+
+  <div id="dataRequest" class="tab-content form-section">
+    <h3>Data Request</h3>
+    <form id="dataRequestForm">
+      <label>Request Data For:</label>
+      <input type="radio" id="scopeSample" name="dataScope" value="sample" checked onchange="toggleDataRequestScope()">
+      <label for="scopeSample" class="checkbox-group">Specific Sample ID</label>
+      <input type="radio" id="scopeLot" name="dataScope" value="lot" onchange="toggleDataRequestScope()">
+      <label for="scopeLot" class="checkbox-group">Entire Lot Number</label>
+
+      <div id="sampleIdDiv">
+        <label for="requestSampleId">Sample ID:</label>
+        <input type="text" id="requestSampleId" name="requestSampleId" required>
+      </div>
+
+      <div id="lotNumberDiv" style="display:none;">
+        <label for="requestLotNumber">Lot Number:</label>
+        <input type="text" id="requestLotNumber" name="requestLotNumber">
+      </div>
+
+      <label for="dataNeeded">Specific Data Needed:</label>
+      <textarea id="dataNeeded" name="dataNeeded" rows="4" required></textarea>
+
+      <label for="sharingMedium">Preferred Sharing Medium:</label>
+      <select id="sharingMedium" name="sharingMedium" required>
+        <option value="">Select...</option>
+        <option value="Email">Email</option>
+        <option value="Google Drive Link">Google Drive Link</option>
+        <option value="Physical Media (USB, HDD)">Physical Media (USB, HDD)</option>
+        <option value="Other">Other (specify in data needed)</option>
+      </select>
+
+      <button type="submit" class="submit-button">Request Data</button>
+      <div class="loading-spinner" id="dataRequestSpinner"></div>
+      <div id="dataRequestMessage" class="message"></div>
+    </form>
+  </div>
+
+</div>
+
+<script>
+  // REPLACE THIS WITH YOUR DEPLOYED WEB APP URL
+  const WEB_APP_URL = 'YOUR_DEPLOYED_WEB_APP_URL_HERE'; // e.g., 'https://script.google.com/macros/s/AKfycBx_xxxxxxxxxxxxxxxxx/exec'
+
+  let sampleCounter = 0;
+
+  document.addEventListener('DOMContentLoaded', function() {
+    addSample(); // Add one sample section by default
+    document.getElementById('sampleRequestForm').addEventListener('submit', handleFormSubmit);
+    document.getElementById('trackingUpdateForm').addEventListener('submit', handleFormSubmit);
+    document.getElementById('dataRequestForm').addEventListener('submit', handleFormSubmit);
+  });
+
+  function openTab(tabName) {
+    const tabs = document.querySelectorAll('.tab-content');
+    tabs.forEach(tab => tab.classList.remove('active'));
+
+    const buttons = document.querySelectorAll('.tab-button');
+    buttons.forEach(button => button.classList.remove('active'));
+
+    document.getElementById(tabName).classList.add('active');
+    document.querySelector(`.tab-button[onclick="openTab('${tabName}')"]`).classList.add('active');
+  }
+
+  function toggleDataRequestScope() {
+    const sampleIdDiv = document.getElementById('sampleIdDiv');
+    const lotNumberDiv = document.getElementById('lotNumberDiv');
+    const requestSampleId = document.getElementById('requestSampleId');
+    const requestLotNumber = document.getElementById('requestLotNumber');
+
+    if (document.getElementById('scopeSample').checked) {
+      sampleIdDiv.style.display = 'block';
+      lotNumberDiv.style.display = 'none';
+      requestSampleId.setAttribute('required', 'required');
+      requestLotNumber.removeAttribute('required');
+    } else {
+      sampleIdDiv.style.display = 'none';
+      lotNumberDiv.style.display = 'block';
+      requestSampleId.removeAttribute('required');
+      requestLotNumber.setAttribute('required', 'required');
+    }
+  }
+
+  function addSample() {
+    sampleCounter++;
+    const container = document.getElementById('samplesContainer');
+    const sampleDiv = document.createElement('div');
+    sampleDiv.className = 'sample-item';
+    sampleDiv.setAttribute('data-sample-id', sampleCounter);
+    sampleDiv.innerHTML = `
+      <h4>Sample #${sampleCounter} <button type="button" class="remove-button" onclick="removeSample(this)">Remove</button></h4>
+      <label for="sampleID-${sampleCounter}">Sample ID:</label>
+      <input type="text" id="sampleID-${sampleCounter}" name="sampleID" required>
+
+      <label for="materialType-${sampleCounter}">Material Type:</label>
+      <input type="text" id="materialType-${sampleCounter}" name="materialType" required>
+
+      <label for="sampleShape-${sampleCounter}">Sample Shape:</label>
+      <select id="sampleShape-${sampleCounter}" name="sampleShape" onchange="toggleDimensions(this.value, ${sampleCounter})" required>
+        <option value="">Select Shape</option>
+        <option value="Cylindrical">Cylindrical</option>
+        <option value="Rectangular">Rectangular</option>
+        <option value="Sheet/Foil">Sheet/Foil</option>
+        <option value="Powder">Powder</option>
+        <option value="Other">Other</option>
+      </select>
+
+      <div id="dimensionsContainer-${sampleCounter}" class="dimension-item" style="display:none; margin-top:15px;">
+        <h5>Dimensions (mm)</h5>
+        </div>
+
+      <label for="weight-${sampleCounter}">Weight (grams):</label>
+      <input type="number" id="weight-${sampleCounter}" name="weight" step="0.001">
+
+      <div id="compositionContainer-${sampleCounter}" style="margin-top: 15px;">
+        <h5>Composition (Element, Isotope, Percentage)</h5>
+        </div>
+      <button type="button" class="add-button" onclick="addComposition(${sampleCounter})">Add Composition</button>
+
+      <div id="experimentTypesContainer-${sampleCounter}" style="margin-top: 15px;">
+        <h5>Desired Experiment Types</h5>
+        </div>
+      <button type="button" class="add-button" onclick="addExperimentType(${sampleCounter})">Add Experiment Type</button>
+
+
+      <label for="quantity-${sampleCounter}">Quantity of this Sample Type:</label>
+      <input type="number" id="quantity-${sampleCounter}" name="quantity" min="1" value="1" required>
+
+      <label for="desiredCompletionDate-${sampleCounter}">Desired Completion Date (Optional):</label>
+      <input type="date" id="desiredCompletionDate-${sampleCounter}" name="desiredCompletionDate">
+
+      <label for="sampleSpecialInstructions-${sampleCounter}">Sample-Specific Instructions (Optional):</label>
+      <textarea id="sampleSpecialInstructions-${sampleCounter}" name="sampleSpecialInstructions" rows="3"></textarea>
+    `;
+    container.appendChild(sampleDiv);
+
+    // Add initial composition and experiment type
+    addComposition(sampleCounter);
+    addExperimentType(sampleCounter); // Add default experiment type fields
+  }
+
+  function removeSample(button) {
+    const sampleDiv = button.closest('.sample-item');
+    sampleDiv.remove();
+  }
+
+  function toggleDimensions(shape, sampleIndex) {
+    const dimensionsContainer = document.getElementById(`dimensionsContainer-${sampleIndex}`);
+    dimensionsContainer.innerHTML = '<h5>Dimensions (mm)</h5>'; // Clear previous dimensions
+    let html = '';
+
+    const addInput = (id, label, type = 'number', step = 'any') => `
+      <div>
+        <label for="${id}">${label}:</label>
+        <input type="${type}" id="${id}" name="${id.split('-')[0]}" step="${step}">
+      </div>
+    `;
+
+    switch (shape) {
+      case 'Cylindrical':
+        html += addInput(`dimDiameter-${sampleIndex}`, 'Diameter');
+        html += addInput(`dimLength-${sampleIndex}`, 'Length');
+        html += addInput(`dimGaugeLength-${sampleIndex}`, 'Gauge Length (optional)');
+        break;
+      case 'Rectangular':
+        html += addInput(`dimLength-${sampleIndex}`, 'Length');
+        html += addInput(`dimWidth-${sampleIndex}`, 'Width');
+        html += addInput(`dimThickness-${sampleIndex}`, 'Thickness');
+        break;
+      case 'Sheet/Foil':
+        html += addInput(`dimLength-${sampleIndex}`, 'Length');
+        html += addInput(`dimWidth-${sampleIndex}`, 'Width');
+        html += addInput(`dimThickness-${sampleIndex}`, 'Thickness');
+        break;
+      case 'Powder':
+        html += `<span>No specific dimensions for powder.</span>`;
+        break;
+      case 'Other':
+        html += addInput(`dimDescription-${sampleIndex}`, 'Description (e.g., Sphere, Cube)', 'text');
+        html += addInput(`dimOther-${sampleIndex}`, 'Other relevant dimensions (e.g., radius, side length)', 'text');
+        break;
+    }
+    dimensionsContainer.innerHTML += html;
+    dimensionsContainer.style.display = (shape === '' || shape === 'Powder') ? 'none' : 'block';
+
+    // Set required attribute for dimension inputs based on shape
+    const inputs = dimensionsContainer.querySelectorAll('input');
+    inputs.forEach(input => {
+        if (shape === 'Cylindrical' && (input.id.includes('dimDiameter') || input.id.includes('dimLength'))) {
+            input.setAttribute('required', 'required');
+        } else if ((shape === 'Rectangular' || shape === 'Sheet/Foil') && (input.id.includes('dimLength') || input.id.includes('dimWidth') || input.id.includes('dimThickness'))) {
+            input.setAttribute('required', 'required');
+        } else if (shape === 'Other' && input.id.includes('dimDescription')) {
+            input.setAttribute('required', 'required');
+        } else {
+            input.removeAttribute('required');
+        }
+    });
+  }
+
+  function addComposition(sampleIndex) {
+    const compContainer = document.getElementById(`compositionContainer-${sampleIndex}`);
+    const compDiv = document.createElement('div');
+    compDiv.className = 'composition-item';
+    const compCount = compContainer.querySelectorAll('.composition-item').length;
+    compDiv.innerHTML = `
+      <label for="element-${sampleIndex}-${compCount}">Element:</label>
+      <input type="text" id="element-${sampleIndex}-${compCount}" name="element" required>
+      <label for="isotope-${sampleIndex}-${compCount}">Isotope (e.g., 235U, natural U):</label>
+      <input type="text" id="isotope-${sampleIndex}-${compCount}" name="isotope" required>
+      <label for="percentage-${sampleIndex}-${compCount}">Percentage (%):</label>
+      <input type="number" id="percentage-${sampleIndex}-${compCount}" name="percentage" step="0.01" required>
+      <button type="button" class="remove-button" onclick="removeComposition(this)">Remove Composition</button>
+    `;
+    compContainer.appendChild(compDiv);
+  }
+
+  function removeComposition(button) {
+    button.closest('.composition-item').remove();
+  }
+
+  function addExperimentType(sampleIndex) {
+    const expContainer = document.getElementById(`experimentTypesContainer-${sampleIndex}`);
+    const expDiv = document.createElement('div');
+    expDiv.className = 'experiment-item';
+    expDiv.innerHTML = `
+      <label for="expType-${sampleIndex}-${expContainer.children.length}">Experiment Type:</label>
+      <input type="text" id="expType-${sampleIndex}-${expContainer.children.length}" name="expType" required>
+      <label for="expDetails-${sampleIndex}-${expContainer.children.length}">Details (Optional):</label>
+      <input type="text" id="expDetails-${sampleIndex}-${expContainer.children.length}" name="expDetails">
+      <button type="button" class="remove-button" onclick="removeExperimentType(this)">Remove Experiment Type</button>
+    `;
+    expContainer.appendChild(expDiv);
+  }
+
+  function removeExperimentType(button) {
+    button.closest('.experiment-item').remove();
+  }
+
+  async function handleFormSubmit(event) {
+    event.preventDefault();
+
+    const form = event.target;
+    const formId = form.id;
+    const submitButton = form.querySelector('.submit-button');
+    const spinner = form.querySelector('.loading-spinner');
+    const messageDiv = form.querySelector('.message');
+
+    submitButton.disabled = true;
+    spinner.style.display = 'block';
+    messageDiv.className = 'message';
+    messageDiv.textContent = '';
+
+    let payload = {};
+    let type = '';
+
+    if (formId === 'sampleRequestForm') {
+      type = 'sampleRequest';
+      payload = {
+        type: type,
+        lotNumber: document.getElementById('lotNumber').value,
+        collaboratorName: document.getElementById('collaboratorName').value,
+        collaboratorCompany: document.getElementById('collaboratorCompany').value,
+        collaboratorEmail: document.getElementById('collaboratorEmail').value,
+        collaboratorPhone: document.getElementById('collaboratorPhone').value,
+        generalSpecialInstructions: document.getElementById('generalSpecialInstructions').value,
+        samples: []
+      };
+
+      document.querySelectorAll('.sample-item').forEach(sampleDiv => {
+        const sampleIndex = sampleDiv.getAttribute('data-sample-id');
+        const sampleData = {
+          sampleID: sampleDiv.querySelector(`[name="sampleID"]`).value,
+          materialType: sampleDiv.querySelector(`[name="materialType"]`).value,
+          sampleShape: sampleDiv.querySelector(`[name="sampleShape"]`).value,
+          weight: sampleDiv.querySelector(`[name="weight"]`).value,
+          quantity: sampleDiv.querySelector(`[name="quantity"]`).value,
+          desiredCompletionDate: sampleDiv.querySelector(`[name="desiredCompletionDate"]`).value,
+          sampleSpecialInstructions: sampleDiv.querySelector(`[name="sampleSpecialInstructions"]`).value,
+          dimensions: {},
+          composition: [],
+          experimentTypes: []
+        };
+
+        // Gather dimensions
+        sampleDiv.querySelectorAll(`#dimensionsContainer-${sampleIndex} input`).forEach(input => {
+          if (input.value) { // Only include if value is not empty
+            sampleData.dimensions[input.name] = input.value;
+          }
+        });
+
+        // Gather composition
+        sampleDiv.querySelectorAll(`#compositionContainer-${sampleIndex} .composition-item`).forEach(compItem => {
+          const element = compItem.querySelector(`[name="element"]`).value;
+          const isotope = compItem.querySelector(`[name="isotope"]`).value;
+          const percentage = compItem.querySelector(`[name="percentage"]`).value;
+          if (element && isotope && percentage) {
+            sampleData.composition.push({ element, isotope, percentage: parseFloat(percentage) });
+          }
+        });
+
+        // Gather experiment types
+        sampleDiv.querySelectorAll(`#experimentTypesContainer-${sampleIndex} .experiment-item`).forEach(expItem => {
+          const type = expItem.querySelector(`[name="expType"]`).value;
+          const details = expItem.querySelector(`[name="expDetails"]`).value;
+          if (type) {
+            sampleData.experimentTypes.push({ type, details });
+          }
+        });
+
+        payload.samples.push(sampleData);
+      });
+
+    } else if (formId === 'trackingUpdateForm') {
+      type = 'trackingUpdate';
+      payload = {
+        type: type,
+        lotNumber: document.getElementById('updateLotNumber').value,
+        trackingNumber: document.getElementById('trackingNumber').value
+      };
+    } else if (formId === 'dataRequestForm') {
+      type = 'dataRequest';
+      payload = {
+        type: type,
+        scope: document.querySelector('input[name="dataScope"]:checked').value,
+        dataNeeded: document.getElementById('dataNeeded').value,
+        sharingMedium: document.getElementById('sharingMedium').value
+      };
+      if (payload.scope === 'sample') {
+        payload.sampleId = document.getElementById('requestSampleId').value;
+      } else {
+        payload.lotNumber = document.getElementById('requestLotNumber').value;
+      }
+    }
+
+    try {
+      const response = await fetch(WEB_APP_URL, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(payload),
+      });
+
+      const result = await response.json();
+
+      if (result.success) {
+        messageDiv.classList.add('success');
+        messageDiv.textContent = result.message || 'Request submitted successfully!';
+        form.reset(); // Clear form on success
+        if (formId === 'sampleRequestForm') {
+          // Re-initialize for sample request form
+          document.getElementById('samplesContainer').innerHTML = '';
+          sampleCounter = 0;
+          addSample();
+          toggleDimensions(document.getElementById(`sampleShape-1`).value, 1);
+        }
+      } else {
+        messageDiv.classList.add('error');
+        messageDiv.textContent = result.message || 'An error occurred. Please try again.';
+      }
+    } catch (error) {
+      messageDiv.classList.add('error');
+      messageDiv.textContent = `Network error: ${error.message}. Please check your connection or contact support.`;
+      console.error('Fetch error:', error);
+    } finally {
+      submitButton.disabled = false;
+      spinner.style.display = 'none';
+    }
+  }
+</script>
+
+</body>
+</html>
