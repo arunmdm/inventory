@@ -747,13 +747,13 @@
                     console.log("Google Apps Script response:", result.message);
                 } else {
                     console.error("Error from Google Apps Script:", result.message);
-                    alert("An error occurred: " + result.message);
+                    // alert("An error occurred: " + result.message); // Removed alert for more controlled feedback
                 }
                 return result; // Return the result for login handling
             } catch (error) {
                 console.error("Network or fetch error:", error);
-                alert("Failed to connect to the server. Please check your internet connection or try again later.");
-                return { success: false, message: "Network error." };
+                // alert("Failed to connect to the server. Please check your internet connection or try again later."); // Removed alert
+                return { success: false, message: "Network error. Please check console for details." };
             }
         }
 
@@ -1197,29 +1197,40 @@
         // Login Logic
         async function handleLogin(event) {
             event.preventDefault();
-            const usernameInput = document.getElementById('username').value;
-            const passwordInput = document.getElementById('password').value;
+            const usernameInput = document.getElementById('username');
+            const passwordInput = document.getElementById('password');
             const loginError = document.getElementById('loginError');
+            const loginButton = event.submitter; // Get the button that triggered the submit
+
+            loginButton.disabled = true; // Disable button to prevent multiple clicks
+            loginError.classList.add('hidden'); // Hide previous errors
 
             const payload = {
                 type: 'login',
-                username: usernameInput,
-                password: passwordInput
+                username: usernameInput.value,
+                password: passwordInput.value
             };
 
-            const result = await sendDataToGoogleAppsScript(payload);
+            try {
+                const result = await sendDataToGoogleAppsScript(payload);
 
-            if (result.success) {
-                document.getElementById('loginPage').classList.add('hidden');
-                document.getElementById('mainContent').classList.remove('hidden');
-                loginError.classList.add('hidden');
-                // Initialize with one sample request block when the page loads
-                addSampleRequest(); // Ensure this is called only once after successful login
-                renderTrackSamplesTable(); // Render tables after login
-                renderViewDataTable();
-            } else {
+                if (result.success) {
+                    document.getElementById('loginPage').classList.add('hidden');
+                    document.getElementById('mainContent').classList.remove('hidden');
+                    // Initialize with one sample request block when the page loads
+                    addSampleRequest(); // Ensure this is called only once after successful login
+                    renderTrackSamplesTable(); // Render tables after login
+                    renderViewDataTable();
+                } else {
+                    loginError.classList.remove('hidden');
+                    loginError.textContent = result.message || 'Login failed. Please try again.';
+                }
+            } catch (error) {
+                console.error("Login network error:", error);
                 loginError.classList.remove('hidden');
-                loginError.textContent = result.message || 'Invalid username or password.';
+                loginError.textContent = "Could not connect to the server. Please check your internet connection and the Web App URL.";
+            } finally {
+                loginButton.disabled = false; // Re-enable button
             }
         }
 
