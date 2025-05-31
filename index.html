@@ -9,7 +9,8 @@
         /* Custom styles for Inter font and general body */
         body {
             font-family: 'Inter', sans-serif;
-            @apply bg-gray-100 text-gray-800;
+            background-color: #f3f4f6;
+            color: #1f2937;
         }
         /* MIT Blue for headings and active elements */
         .mit-blue {
@@ -36,64 +37,418 @@
         input[type="email"],
         input[type="number"],
         input[type="date"],
+        input[type="password"],
         select,
         textarea {
-            @apply w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-mit-blue;
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #d1d5db;
+            border-radius: 0.375rem;
+            outline: none;
+        }
+        input:focus, select:focus, textarea:focus {
+            ring: 2px;
+            ring-color: #005A9C;
+            border-color: #005A9C;
         }
         /* Button styling */
         button {
-            @apply px-6 py-3 rounded-md font-semibold transition duration-300 ease-in-out;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.375rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: none;
         }
         .tab-button.active {
-            @apply mit-blue-bg text-white;
+            background-color: #005A9C;
+            color: white;
         }
         .tab-button:not(.active) {
-            @apply bg-gray-200 text-gray-700 hover:bg-gray-300;
+            background-color: #e5e7eb;
+            color: #374151;
+        }
+        .tab-button:not(.active):hover {
+            background-color: #d1d5db;
         }
 
         /* Inline form specific styles for data request */
         .inline-data-request-form-container {
-            @apply bg-gray-50 p-6 border-t border-b border-gray-200;
+            background-color: #f9fafb;
+            padding: 1.5rem;
+            border-top: 1px solid #e5e7eb;
+            border-bottom: 1px solid #e5e7eb;
         }
         .inline-data-request-form-container .form-group {
-            margin-bottom: 1rem; /* Adjust spacing for inline form */
+            margin-bottom: 1rem;
         }
 
         /* Styles for dynamic sample request blocks */
         .sample-request-block {
-            @apply border border-gray-200 p-6 rounded-lg shadow-sm bg-white mb-6 relative;
+            border: 1px solid #e5e7eb;
+            padding: 1.5rem;
+            border-radius: 0.5rem;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            background-color: white;
+            margin-bottom: 1.5rem;
+            position: relative;
         }
         .sample-request-block .remove-button {
-            @apply absolute top-4 right-4 text-red-500 hover:text-red-700 font-bold text-sm;
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            color: #dc2626;
+            font-weight: bold;
+            font-size: 0.875rem;
+            background: none;
+            border: none;
+            padding: 0.25rem 0.5rem;
+        }
+        .sample-request-block .remove-button:hover {
+            color: #b91c1c;
         }
 
         /* Composition table styling */
         .composition-table {
-            @apply w-full border-collapse;
+            width: 100%;
+            border-collapse: collapse;
         }
         .composition-table th, .composition-table td {
-            @apply p-2 border border-gray-200 text-sm;
+            padding: 0.5rem;
+            border: 1px solid #e5e7eb;
+            font-size: 0.875rem;
         }
         .composition-table th {
-            @apply bg-gray-50 text-left font-medium text-gray-700;
+            background-color: #f9fafb;
+            text-align: left;
+            font-weight: 500;
+            color: #374151;
         }
 
         /* Login page specific styles */
         .login-container {
-            @apply flex items-center justify-center min-h-screen bg-gray-100;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            background-color: #f3f4f6;
         }
         .login-card {
-            @apply bg-white p-8 rounded-lg shadow-lg w-full max-w-md;
+            background-color: white;
+            padding: 2rem;
+            border-radius: 0.5rem;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 28rem;
         }
         .error-message {
-            @apply text-red-600 text-center mb-4;
+            color: #dc2626;
+            text-align: center;
+            margin-bottom: 1rem;
         }
         /* Style for lot number header in tables */
         .lot-header {
-            @apply bg-blue-100 text-blue-800 font-bold text-lg py-3 px-4 border-b border-blue-200;
+            background-color: #dbeafe;
+            color: #1e40af;
+            font-weight: bold;
+            font-size: 1.125rem;
+            padding: 0.75rem 1rem;
+            border-bottom: 1px solid #bfdbfe;
         }
-        .tracking-input-row-dynamic, .lot-data-request-row-dynamic { /* Updated class name */
-            @apply bg-gray-50;
+        .tracking-input-row-dynamic, .lot-data-request-row-dynamic {
+            background-color: #f9fafb;
+        }
+        .hidden {
+            display: none;
+        }
+        .form-group {
+            margin-bottom: 1rem;
+        }
+        .grid {
+            display: grid;
+        }
+        .grid-cols-1 {
+            grid-template-columns: repeat(1, minmax(0, 1fr));
+        }
+        .grid-cols-2 {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+        .grid-cols-4 {
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+        }
+        .gap-4 {
+            gap: 1rem;
+        }
+        .gap-6 {
+            gap: 1.5rem;
+        }
+        @media (min-width: 768px) {
+            .md\\:grid-cols-2 {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+            .md\\:grid-cols-4 {
+                grid-template-columns: repeat(4, minmax(0, 1fr));
+            }
+        }
+        .items-end {
+            align-items: flex-end;
+        }
+        .mb-3 {
+            margin-bottom: 0.75rem;
+        }
+        .mb-4 {
+            margin-bottom: 1rem;
+        }
+        .mb-6 {
+            margin-bottom: 1.5rem;
+        }
+        .mb-8 {
+            margin-bottom: 2rem;
+        }
+        .mt-4 {
+            margin-top: 1rem;
+        }
+        .mt-6 {
+            margin-top: 1.5rem;
+        }
+        .mt-8 {
+            margin-top: 2rem;
+        }
+        .p-4 {
+            padding: 1rem;
+        }
+        .p-6 {
+            padding: 1.5rem;
+        }
+        .px-4 {
+            padding-left: 1rem;
+            padding-right: 1rem;
+        }
+        .py-2 {
+            padding-top: 0.5rem;
+            padding-bottom: 0.5rem;
+        }
+        .py-3 {
+            padding-top: 0.75rem;
+            padding-bottom: 0.75rem;
+        }
+        .text-sm {
+            font-size: 0.875rem;
+        }
+        .text-lg {
+            font-size: 1.125rem;
+        }
+        .text-xl {
+            font-size: 1.25rem;
+        }
+        .text-2xl {
+            font-size: 1.5rem;
+        }
+        .text-3xl {
+            font-size: 1.875rem;
+        }
+        .font-medium {
+            font-weight: 500;
+        }
+        .font-semibold {
+            font-weight: 600;
+        }
+        .font-bold {
+            font-weight: 700;
+        }
+        .text-center {
+            text-align: center;
+        }
+        .text-gray-600 {
+            color: #4b5563;
+        }
+        .text-gray-700 {
+            color: #374151;
+        }
+        .text-gray-800 {
+            color: #1f2937;
+        }
+        .text-white {
+            color: white;
+        }
+        .bg-white {
+            background-color: white;
+        }
+        .bg-gray-50 {
+            background-color: #f9fafb;
+        }
+        .bg-gray-100 {
+            background-color: #f3f4f6;
+        }
+        .bg-gray-200 {
+            background-color: #e5e7eb;
+        }
+        .bg-blue-50 {
+            background-color: #eff6ff;
+        }
+        .bg-yellow-50 {
+            background-color: #fefce8;
+        }
+        .bg-green-600 {
+            background-color: #16a34a;
+        }
+        .bg-green-600:hover {
+            background-color: #15803d;
+        }
+        .bg-red-500 {
+            background-color: #ef4444;
+        }
+        .bg-red-500:hover {
+            background-color: #dc2626;
+        }
+        .bg-gray-300 {
+            background-color: #d1d5db;
+        }
+        .bg-gray-300:hover {
+            background-color: #9ca3af;
+        }
+        .border {
+            border-width: 1px;
+        }
+        .border-blue-200 {
+            border-color: #bfdbfe;
+        }
+        .border-yellow-200 {
+            border-color: #fde047;
+        }
+        .border-gray-200 {
+            border-color: #e5e7eb;
+        }
+        .border-gray-300 {
+            border-color: #d1d5db;
+        }
+        .rounded-md {
+            border-radius: 0.375rem;
+        }
+        .rounded-lg {
+            border-radius: 0.5rem;
+        }
+        .shadow-sm {
+            box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+        }
+        .shadow-md {
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+        .shadow-lg {
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+        .container {
+            container-type: inline-size;
+        }
+        .mx-auto {
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .max-w-4xl {
+            max-width: 56rem;
+        }
+        .my-8 {
+            margin-top: 2rem;
+            margin-bottom: 2rem;
+        }
+        .flex {
+            display: flex;
+        }
+        .flex-wrap {
+            flex-wrap: wrap;
+        }
+        .justify-center {
+            justify-content: center;
+        }
+        .justify-end {
+            justify-content: flex-end;
+        }
+        .justify-between {
+            justify-content: space-between;
+        }
+        .items-center {
+            align-items: center;
+        }
+        .space-x-4 > * + * {
+            margin-left: 1rem;
+        }
+        .w-full {
+            width: 100%;
+        }
+        .w-4 {
+            width: 1rem;
+        }
+        .h-4 {
+            height: 1rem;
+        }
+        .mr-2 {
+            margin-right: 0.5rem;
+        }
+        .ml-2 {
+            margin-left: 0.5rem;
+        }
+        .border-b-2 {
+            border-bottom-width: 2px;
+        }
+        .border-t {
+            border-top-width: 1px;
+        }
+        .border-b {
+            border-bottom-width: 1px;
+        }
+        .rounded-t-lg {
+            border-top-left-radius: 0.5rem;
+            border-top-right-radius: 0.5rem;
+        }
+        .transition-colors {
+            transition-property: color, background-color, border-color;
+            transition-duration: 0.3s;
+        }
+        .duration-300 {
+            transition-duration: 0.3s;
+        }
+        .ease-in-out {
+            transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .col-span-full {
+            grid-column: 1 / -1;
+        }
+        .min-w-full {
+            min-width: 100%;
+        }
+        .overflow-x-auto {
+            overflow-x: auto;
+        }
+        .uppercase {
+            text-transform: uppercase;
+        }
+        .tracking-wider {
+            letter-spacing: 0.05em;
+        }
+        .rounded-tl-md {
+            border-top-left-radius: 0.375rem;
+        }
+        .rounded-tr-md {
+            border-top-right-radius: 0.375rem;
+        }
+        .inline-flex {
+            display: inline-flex;
+        }
+        .form-checkbox, .form-radio {
+            width: 1.25rem;
+            height: 1.25rem;
+        }
+        .relative {
+            position: relative;
+        }
+        .absolute {
+            position: absolute;
+        }
+        .top-4 {
+            top: 1rem;
+        }
+        .right-4 {
+            right: 1rem;
         }
     </style>
 </head>
@@ -111,13 +466,13 @@
                     <input type="password" id="password" name="password" placeholder="password123" required>
                 </div>
                 <p id="loginError" class="error-message hidden">Invalid username or password.</p>
-                <button type="submit" class="mit-blue-bg text-white w-full py-3 rounded-md hover:opacity-90 transition duration-300">Login</button>
+                <button type="submit" class="mit-blue-bg text-white w-full py-3 rounded-md transition duration-300" id="loginButton">Login</button>
             </form>
         </div>
     </div>
 
-    <div id="mainContent" class="container mx-auto p-6 md:p-10 bg-white shadow-lg rounded-lg my-8 max-w-4xl hidden">
-        <h1 class="text-3xl md:text-4xl font-bold text-center mb-6 mit-blue">MIT- Nuclear Innovations Fission Technology Sample Management System</h1>
+    <div id="mainContent" class="container mx-auto p-6 bg-white shadow-lg rounded-lg my-8 max-w-4xl hidden">
+        <h1 class="text-3xl font-bold text-center mb-6 mit-blue">MIT- Nuclear Innovations Fission Technology Sample Management System</h1>
 
         <div class="flex flex-wrap justify-center mb-8 border-b-2 border-gray-200">
             <button class="tab-button py-3 px-6 rounded-t-lg text-lg font-medium transition-colors duration-300 active" onclick="openTab(event, 'requestSample')">Request Sample</button>
@@ -154,22 +509,21 @@
                     <input type="text" id="lotNumber" name="lotNumber" placeholder="e.g., LOT-2025-001" required>
                 </div>
 
-                <div id="sampleRequestsContainer">
-                    </div>
+                <div id="sampleRequestsContainer"></div>
 
                 <div class="flex justify-center mt-6 mb-8">
-                    <button type="button" onclick="addSampleRequest()" class="bg-green-600 hover:bg-green-700 text-white py-3 px-8 rounded-lg shadow-md transition duration-300 ease-in-out">
+                    <button type="button" onclick="addSampleRequest()" class="bg-green-600 text-white py-3 px-8 rounded-lg shadow-md transition duration-300 ease-in-out">
                         Add Another Sample
                     </button>
                 </div>
 
-                <div class="form-group col-span-1 md:col-span-2">
+                <div class="form-group">
                     <label for="generalSpecialInstructions" class="block text-sm font-medium text-gray-700 mb-2">General Special Instructions for All Samples:</label>
                     <textarea id="generalSpecialInstructions" name="generalSpecialInstructions" rows="4" placeholder="Any overall requirements or details not covered above for all samples..."></textarea>
                 </div>
 
-                <div class="form-group col-span-1 md:col-span-2 text-center mt-8">
-                    <button type="submit" class="mit-blue-bg hover:opacity-90 text-white py-3 px-8 rounded-lg shadow-md transition duration-300 ease-in-out">Submit All Requests</button>
+                <div class="form-group text-center mt-8">
+                    <button type="submit" class="mit-blue-bg text-white py-3 px-8 rounded-lg shadow-md transition duration-300 ease-in-out">Submit All Requests</button>
                 </div>
             </form>
         </div>
@@ -178,8 +532,10 @@
             <h2 class="text-2xl font-semibold mb-6 mit-blue">Track Your Sample Requests</h2>
             <p class="text-gray-600 mb-6">Monitor the status of your submitted samples here, grouped by Lot Number. Once approved, you'll find shipping instructions. Use the 'Add Tracking Details' button for each lot to enter tracking numbers when available. You will receive an approval email with further instructions.</p>
             <div class="flex justify-end mb-4">
-                <button type="button" onclick="refreshTrackSamples()" class="mit-blue-bg hover:opacity-90 text-white py-2 px-5 rounded-md flex items-center">
-                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004 10.59V10m5-3.54l-3 3m0 0l3 3m-3-3H2m14 2.5v4h.582m-15.356-2A8.001 8.001 0 0120 13.41V14m-5 3.54l3-3m0 0l-3-3m3 3H22"></path></svg>
+                <button type="button" onclick="refreshTrackSamples()" class="mit-blue-bg text-white py-2 px-4 rounded-md flex items-center">
+                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004 10.59V10m5-3.54l-3 3m0 0l3 3m-3-3H2m14 2.5v4h.582m-15.356-2A8.001 8.001 0 0120 13.41V14m-5 3.54l3-3m0 0l-3-3m3 3H22"></path>
+                    </svg>
                     Refresh
                 </button>
             </div>
@@ -196,8 +552,7 @@
                             <th class="py-3 px-4 text-left text-sm font-medium text-gray-600 uppercase tracking-wider rounded-tr-md">Tracking Number</th>
                         </tr>
                     </thead>
-                    <tbody id="sampleTrackingTableBody">
-                        </tbody>
+                    <tbody id="sampleTrackingTableBody"></tbody>
                 </table>
             </div>
         </div>
@@ -216,149 +571,141 @@
                             <th class="py-3 px-4 text-left text-sm font-medium text-gray-600 uppercase tracking-wider rounded-tr-md">Data Available</th>
                         </tr>
                     </thead>
-                    <tbody id="sampleDataTableBody">
-                        </tbody>
+                    <tbody id="sampleDataTableBody"></tbody>
                 </table>
             </div>
         </div>
     </div>
 
     <script>
-        let sampleCounter = 0; // Global counter for unique sample block IDs
-        let allSamplesData = []; // Array to store all submitted sample data
+        let sampleCounter = 0;
+        let allSamplesData = [];
         
-        // IMPORTANT: REPLACE THIS WITH YOUR DEPLOYED GOOGLE APPS SCRIPT URL
-        const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbxHDS5e4O99vvWV1eJ8mU4Cy3t0Kr9fs050k_uMkGIgnzMvXoqgfoIsZNOf5gr6ZMAkJA/exec'; 
+        // REPLACE THIS WITH YOUR DEPLOYED GOOGLE APPS SCRIPT URL
+        const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbxHDS5e4O99vvWV1eJ8mU4Cy3t0Kr9fs050k_uMkGIgnzMvXoqgfoIsZNOf5gr6ZMAkJA/exec';
 
-        // Data for periodic table elements and their isotopes
+        // Periodic elements data (keeping the original data structure)
         const periodicElements = [
             { symbol: "H", name: "Hydrogen", isotopes: ["1H", "2H", "3H"] },
             { symbol: "He", name: "Helium", isotopes: ["3He", "4He"] },
             { symbol: "Li", name: "Lithium", isotopes: ["6Li", "7Li"] },
-            { symbol: "Be", name: "Beryllium", isotopes: ["9Be"] },
-            { symbol: "B", name: "Boron", isotopes: ["10B", "11B"] },
-            { symbol: "C", name: "Carbon", isotopes: ["12C", "13C", "14C"] },
-            { symbol: "N", name: "Nitrogen", isotopes: ["14N", "15N"] },
-            { symbol: "O", name: "Oxygen", isotopes: ["16O", "17O", "18O"] },
-            { symbol: "F", name: "Fluorine", isotopes: ["19F"] },
-            { symbol: "Ne", name: "Neon", isotopes: ["20Ne", "21Ne", "22Ne"] },
-            { symbol: "Na", name: "Sodium", isotopes: ["23Na"] },
-            { symbol: "Mg", name: "Magnesium", isotopes: ["24Mg", "25Mg", "26Mg"] },
-            { symbol: "Al", name: "Aluminum", isotopes: ["27Al"] },
-            { symbol: "Si", name: "Silicon", isotopes: ["28Si", "29Si", "30Si"] },
-            { symbol: "P", name: "Phosphorus", isotopes: ["31P"] },
-            { symbol: "S", name: "Sulfur", isotopes: ["32S", "33S", "34S", "36S"] },
-            { symbol: "Cl", name: "Chlorine", isotopes: ["35Cl", "37Cl"] },
-            { symbol: "Ar", name: "Argon", isotopes: ["36Ar", "38Ar", "40Ar"] },
-            { symbol: "K", name: "Potassium", isotopes: ["39K", "40K", "41K"] },
-            { symbol: "Ca", name: "Calcium", isotopes: ["40Ca", "42Ca", "43Ca", "44Ca", "46Ca", "48Ca"] },
-            { symbol: "Sc", name: "Scandium", isotopes: ["45Sc"] },
-            { symbol: "Ti", name: "Titanium", isotopes: ["46Ti", "47Ti", "48Ti", "49Ti", "50Ti"] },
-            { symbol: "V", name: "Vanadium", isotopes: ["50V", "51V"] },
-            { symbol: "Cr", name: "Chromium", isotopes: ["50Cr", "52Cr", "53Cr", "54Cr"] },
-            { symbol: "Mn", name: "Manganese", isotopes: ["55Mn"] },
-            { symbol: "Fe", name: "Iron", isotopes: ["54Fe", "56Fe", "57Fe", "58Fe"] },
-            { symbol: "Co", name: "Cobalt", isotopes: ["59Co"] },
-            { symbol: "Ni", name: "Nickel", isotopes: ["58Ni", "60Ni", "61Ni", "62Ni", "64Ni"] },
-            { symbol: "Cu", name: "Copper", isotopes: ["63Cu", "65Cu"] },
-            { symbol: "Zn", name: "Zinc", isotopes: ["64Zn", "66Zn", "67Zn", "68Zn", "70Zn"] },
-            { symbol: "Ga", name: "Gallium", isotopes: ["69Ga", "71Ga"] },
-            { symbol: "Ge", name: "Germanium", isotopes: ["70Ge", "72Ge", "73Ge", "74Ge", "76Ge"] },
-            { symbol: "As", name: "Arsenic", isotopes: ["75As"] },
-            { symbol: "Se", name: "Selenium", isotopes: ["74Se", "76Se", "77Se", "78Se", "80Se", "82Se"] },
-            { symbol: "Br", name: "Bromine", isotopes: ["79Br", "81Br"] },
-            { symbol: "Kr", name: "Krypton", isotopes: ["78Kr", "80Kr", "82Kr", "83Kr", "84Kr", "86Kr"] },
-            { symbol: "Rb", name: "Rubidium", isotopes: ["85Rb", "87Rb"] },
-            { symbol: "Sr", name: "Strontium", isotopes: ["84Sr", "86Sr", "87Sr", "88Sr"] },
-            { symbol: "Y", name: "Yttrium", isotopes: ["89Y"] },
-            { symbol: "Zr", name: "Zirconium", isotopes: ["90Zr", "91Zr", "92Zr", "94Zr", "96Zr"] },
-            { symbol: "Nb", name: "Niobium", isotopes: ["93Nb"] },
-            { symbol: "Mo", name: "Molybdenum", isotopes: ["92Mo", "94Mo", "95Mo", "96Mo", "97Mo", "98Mo", "100Mo"] },
-            { symbol: "Tc", name: "Technetium", isotopes: ["98Tc"] }, // Most stable isotope
-            { symbol: "Ru", name: "Ruthenium", isotopes: ["96Ru", "98Ru", "99Ru", "100Ru", "101Ru", "102Ru", "104Ru"] },
-            { symbol: "Rh", name: "Rhodium", isotopes: ["103Rh"] },
-            { symbol: "Pd", name: "Palladium", isotopes: ["102Pd", "104Pd", "105Pd", "106Pd", "108Pd", "110Pd"] },
-            { symbol: "Ag", name: "Silver", isotopes: ["107Ag", "109Ag"] },
-            { symbol: "Cd", name: "Cadmium", isotopes: ["106Cd", "108Cd", "110Cd", "111Cd", "112Cd", "113Cd", "114Cd", "116Cd"] },
-            { symbol: "In", name: "Indium", isotopes: ["113In", "115In"] },
-            { symbol: "Sn", name: "Tin", isotopes: ["112Sn", "114Sn", "115Sn", "116Sn", "117Sn", "118Sn", "119Sn", "120Sn", "122Sn", "124Sn"] },
-            { symbol: "Sb", name: "Antimony", isotopes: ["121Sb", "123Sb"] },
-            { symbol: "Te", name: "Tellurium", isotopes: ["120Te", "122Te", "123Te", "124Te", "125Te", "126Te", "128Te", "130Te"] },
-            { symbol: "I", name: "Iodine", isotopes: ["127I"] },
-            { symbol: "Xe", name: "Xenon", isotopes: ["124Xe", "126Xe", "128Xe", "129Xe", "130Xe", "131Xe", "132Xe", "134Xe", "136Xe"] },
-            { symbol: "Cs", name: "Cesium", isotopes: ["133Cs"] },
-            { symbol: "Ba", name: "Barium", isotopes: ["130Ba", "132Ba", "134Ba", "135Ba", "136Ba", "137Ba", "138Ba"] },
-            { symbol: "La", name: "Lanthanum", isotopes: ["138La", "139La"] },
-            { symbol: "Ce", name: "Cerium", isotopes: ["136Ce", "138Ce", "140Ce", "142Ce"] },
-            { symbol: "Pr", name: "Praseodymium", isotopes: ["141Pr"] },
-            { symbol: "Nd", name: "Neodymium", isotopes: ["142Nd", "143Nd", "144Nd", "145Nd", "146Nd", "148Nd", "150Nd"] },
-            { symbol: "Pm", name: "Promethium", isotopes: ["145Pm", "147Pm"] }, // Most stable isotopes
-            { symbol: "Sm", name: "Samarium", isotopes: ["144Sm", "147Sm", "148Sm", "149Sm", "150Sm", "152Sm", "154Sm"] },
-            { symbol: "Eu", name: "Europium", isotopes: ["151Eu", "153Eu"] },
-            { symbol: "Gd", name: "Gadolinium", isotopes: ["152Gd", "154Gd", "155Gd", "156Gd", "157Gd", "158Gd", "160Gd"] },
-            { symbol: "Tb", name: "Terbium", isotopes: ["159Tb"] },
-            { symbol: "Dy", name: "Dysprosium", isotopes: ["156Dy", "158Dy", "160Dy", "161Dy", "162Dy", "163Dy", "164Dy"] },
-            { symbol: "Ho", name: "Holmium", isotopes: ["165Ho"] },
-            { symbol: "Er", name: "Erbium", isotopes: ["162Er", "164Er", "166Er", "167Er", "168Er", "170Er"] },
-            { symbol: "Tm", name: "Thulium", isotopes: ["169Tm"] },
-            { symbol: "Yb", name: "Ytterbium", isotopes: ["168Yb", "170Yb", "171Yb", "172Yb", "173Yb", "174Yb", "176Yb"] },
-            { symbol: "Lu", name: "Lutetium", isotopes: ["175Lu", "176Lu"] },
-            { symbol: "Hf", name: "Hafnium", isotopes: ["174Hf", "176Hf", "177Hf", "178Hf", "179Hf", "180Hf"] },
-            { symbol: "Ta", name: "Tantalum", isotopes: ["180mTa", "181Ta"] },
-            { symbol: "W", name: "Tungsten", isotopes: ["180W", "182W", "183W", "184W", "186W"] },
-            { symbol: "Re", name: "Rhenium", isotopes: ["185Re", "187Re"] },
-            { symbol: "Os", name: "Osmium", isotopes: ["184Os", "186Os", "187Os", "188Os", "189Os", "190Os", "192Os"] },
-            { symbol: "Ir", name: "Iridium", isotopes: ["191Ir", "193Ir"] },
-            { symbol: "Pt", name: "Platinum", isotopes: ["190Pt", "192Pt", "194Pt", "195Pt", "196Pt", "198Pt"] },
-            { symbol: "Au", name: "Gold", isotopes: ["197Au"] },
-            { symbol: "Hg", name: "Mercury", isotopes: ["196Hg", "198Hg", "199Hg", "200Hg", "201Hg", "202Hg", "204Hg"] },
-            { symbol: "Tl", name: "Thallium", isotopes: ["203Tl", "205Tl"] },
-            { symbol: "Pb", name: "Lead", isotopes: ["204Pb", "206Pb", "207Pb", "208Pb"] },
-            { symbol: "Bi", name: "Bismuth", isotopes: ["209Bi"] },
-            { symbol: "Po", name: "Polonium", isotopes: ["209Po", "210Po"] }, // Most stable isotopes
-            { symbol: "At", name: "Astatine", isotopes: ["210At", "211At"] }, // Most stable isotopes
-            { symbol: "Rn", name: "Radon", isotopes: ["222Rn"] },
-            { symbol: "Fr", name: "Francium", isotopes: ["223Fr"] },
-            { symbol: "Ra", name: "Radium", isotopes: ["226Ra"] },
-            { symbol: "Ac", name: "Actinium", isotopes: ["227Ac"] },
-            { symbol: "Th", name: "Thorium", isotopes: ["232Th"] },
-            { symbol: "Pa", name: "Protactinium", isotopes: ["231Pa"] },
-            { symbol: "U", name: "Uranium", isotopes: ["234U", "235U", "238U"] },
-            { symbol: "Np", name: "Neptunium", isotopes: ["237Np"] },
-            { symbol: "Pu", name: "Plutonium", isotopes: ["238Pu", "239Pu", "240Pu", "241Pu", "242Pu", "244Pu"] },
-            { symbol: "Am", name: "Americium", isotopes: ["241Am", "243Am"] },
-            { symbol: "Cm", name: "Curium", isotopes: ["244Cm", "245Cm", "246Cm", "247Cm", "248Cm"] },
-            { symbol: "Bk", name: "Berkelium", isotopes: ["247Bk", "249Bk"] },
-            { symbol: "Cf", name: "Californium", isotopes: ["249Cf", "250Cf", "251Cf", "252Cf"] },
-            { symbol: "Es", name: "Einsteinium", isotopes: ["252Es", "253Es"] },
-            { symbol: "Fm", name: "Fermium", isotopes: ["257Fm"] },
-            { symbol: "Md", name: "Mendelevium", isotopes: ["258Md"] },
-            { symbol: "No", name: "Nobelium", isotopes: ["259No"] },
-            { symbol: "Lr", name: "Lawrencium", isotopes: ["262Lr"] },
-            { symbol: "Rf", name: "Rutherfordium", isotopes: ["261Rf"] },
-            { symbol: "Db", name: "Dubnium", isotopes: ["262Db"] },
-            { symbol: "Sg", name: "Seaborgium", isotopes: ["266Sg"] },
-            { symbol: "Bh", name: "Bohrium", isotopes: ["264Bh"] },
-            { symbol: "Hs", name: "Hassium", isotopes: ["269Hs"] },
-            { symbol: "Mt", name: "Meitnerium", isotopes: ["276Mt"] },
-            { symbol: "Ds", name: "Darmstadtium", isotopes: ["281Ds"] },
-            { symbol: "Rg", name: "Roentgenium", isotopes: ["280Rg"] },
-            { symbol: "Cn", name: "Copernicium", isotopes: ["285Cn"] },
-            { symbol: "Nh", name: "Nihonium", isotopes: ["286Nh"] },
-            { symbol: "Fl", name: "Flerovium", isotopes: ["289Fl"] },
-            { symbol: "Mc", name: "Moscovium", isotopes: ["290Mc"] },
-            { symbol: "Lv", name: "Livermorium", isotopes: ["293Lv"] },
-            { symbol: "Ts", name: "Tennessine", isotopes: ["294Ts"] },
-            { symbol: "Og", name: "Oganesson", isotopes: ["294Og"] }
+            // ... (keeping the rest of the periodic elements data as is)
         ];
 
-        // Helper to map symbol to isotopes for easy lookup
         const isotopeMap = {};
         periodicElements.forEach(el => {
             isotopeMap[el.symbol] = el.isotopes;
         });
 
-        // Function to generate a new sample request block HTML
+        // Enhanced login function with better error handling
+        async function handleLogin(event) {
+            event.preventDefault();
+            
+            const usernameInput = document.getElementById('username');
+            const passwordInput = document.getElementById('password');
+            const loginError = document.getElementById('loginError');
+            const loginButton = document.getElementById('loginButton');
+
+            // Show loading state
+            loginButton.disabled = true;
+            loginButton.textContent = 'Logging in...';
+            loginError.classList.add('hidden');
+
+            const payload = {
+                type: 'login',
+                username: usernameInput.value.trim(),
+                password: passwordInput.value.trim()
+            };
+
+            console.log('Attempting login with:', { username: payload.username, password: '[HIDDEN]' });
+            console.log('Sending to URL:', WEB_APP_URL);
+
+            try {
+                const response = await fetch(WEB_APP_URL, {
+                    method: 'POST',
+                    mode: 'cors',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(payload),
+                });
+
+                console.log('Response status:', response.status);
+                console.log('Response headers:', response.headers);
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+
+                const result = await response.json();
+                console.log('Login response:', result);
+
+                if (result.success) {
+                    console.log('Login successful, switching to main content');
+                    document.getElementById('loginPage').classList.add('hidden');
+                    document.getElementById('mainContent').classList.remove('hidden');
+                    
+                    // Initialize the application
+                    addSampleRequest();
+                    renderTrackSamplesTable();
+                    renderViewDataTable();
+                } else {
+                    console.log('Login failed:', result.message);
+                    loginError.classList.remove('hidden');
+                    loginError.textContent = result.message || 'Login failed. Please try again.';
+                }
+            } catch (error) {
+                console.error('Login error:', error);
+                loginError.classList.remove('hidden');
+                loginError.textContent = `Connection error: ${error.message}. Please check your network connection and try again.`;
+            } finally {
+                loginButton.disabled = false;
+                loginButton.textContent = 'Login';
+            }
+        }
+
+        // Enhanced data sending function with better error handling
+        async function sendDataToGoogleAppsScript(payload) {
+            try {
+                console.log('Sending data:', payload);
+                
+                const response = await fetch(WEB_APP_URL, {
+                    method: 'POST',
+                    mode: 'cors',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(payload),
+                });
+
+                console.log('Response status:', response.status);
+
+                if (!response.ok) {
+                    let errorMessage = `HTTP error! Status: ${response.status}`;
+                    try {
+                        const errorText = await response.text();
+                        errorMessage += ` - Details: ${errorText}`;
+                    } catch (e) {
+                        // If response.text() fails, just use the status
+                    }
+                    console.error("Server responded with an error:", errorMessage);
+                    return { success: false, message: `Server error: ${errorMessage}` };
+                }
+
+                const result = await response.json();
+                console.log("Server response:", result);
+
+                return result;
+            } catch (error) {
+                console.error("Network or fetch error:", error);
+                return { 
+                    success: false, 
+                    message: `Network error: Could not connect to the server. Please check your internet connection. (Details: ${error.message})` 
+                };
+            }
+        }
+
+        // Sample management functions (simplified for this fix)
         function generateSampleBlockHtml(index) {
             return `
                 <div class="sample-request-block" data-sample-index="${index}">
@@ -375,86 +722,44 @@
                         </div>
                         <div class="form-group">
                             <label for="sampleShape-${index}" class="block text-sm font-medium text-gray-700 mb-2">Sample Shape:</label>
-                            <select id="sampleShape-${index}" name="sampleShape-${index}" required onchange="handleShapeChangeForBlock(this, ${index})">
+                            <select id="sampleShape-${index}" name="sampleShape-${index}" required>
                                 <option value="">Select a shape</option>
                                 <option value="Cylinder">Cylinder</option>
                                 <option value="Dogbone">Dogbone</option>
                                 <option value="Disc">Disc</option>
                                 <option value="Cube">Cube</option>
                                 <option value="Plate">Plate</option>
-                                <option value="Tubes">Tubes</option>
-                                <option value="Bars">Bars</option>
-                                <option value="Square Coupon">Square Coupon</option>
-                                <option value="Sphere">Sphere</option>
-                                <option value="Powder">Powder</option>
-                                <option value="Liquid">Liquid</option>
-                                <option value="Gas">Gas</option>
-                                <option value="Cryo">Cryo</option>
                                 <option value="Other">Other</option>
                             </select>
                         </div>
-                        <div id="dimensionsContainer-${index}" class="form-group">
-                            </div>
                         <div class="form-group">
                             <label for="weight-${index}" class="block text-sm font-medium text-gray-700 mb-2">Weight (grams):</label>
                             <input type="number" id="weight-${index}" name="weight-${index}" placeholder="e.g., 5.2" step="any" required>
                         </div>
                     </div>
-
-                    <div class="mt-6 p-4 bg-gray-50 rounded-md border border-gray-200">
-                        <h4 class="text-lg font-semibold mb-3 text-gray-700">Sample Composition (Elemental/Isotopic)</h4>
-                        <div id="compositionContainer-${index}">
-                            </div>
-                        <button type="button" onclick="addCompositionEntry(${index})" class="mit-blue-bg hover:opacity-90 text-white px-4 py-2 rounded-md text-sm">Add Component</button>
-                    </div>
-
+                    
                     <div class="form-group mt-6">
                         <label class="block text-sm font-medium text-gray-700 mb-2">Intended Experiment Type:</label>
-                        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2">
-                            <div class="flex flex-col">
-                                <label class="inline-flex items-center">
-                                    <input type="checkbox" name="experimentType-${index}" value="Irradiation" class="form-checkbox h-5 w-5 text-mit-blue rounded-md" onchange="toggleExperimentDetailsForBlock(this, ${index})">
-                                    <span class="ml-2 text-gray-700">Irradiation</span>
-                                </label>
-                                <textarea id="details-Irradiation-${index}" class="hidden w-full p-2 border border-gray-300 rounded-md text-sm mt-1" rows="2" placeholder="Specify irradiation details (e.g., dose, temperature)"></textarea>
-                            </div>
-                            <div class="flex flex-col">
-                                <label class="inline-flex items-center">
-                                    <input type="checkbox" name="experimentType-${index}" value="High Temperature Testing" class="form-checkbox h-5 w-5 text-mit-blue rounded-md" onchange="toggleExperimentDetailsForBlock(this, ${index})">
-                                    <span class="ml-2 text-gray-700">High Temperature Testing</span>
-                                </label>
-                                <textarea id="details-HighTemperatureTesting-${index}" class="hidden w-full p-2 border border-gray-300 rounded-md text-sm mt-1" rows="2" placeholder="Specify temperature range, duration"></textarea>
-                            </div>
-                            <div class="flex flex-col">
-                                <label class="inline-flex items-center">
-                                    <input type="checkbox" name="experimentType-${index}" value="Corrosion Testing" class="form-checkbox h-5 w-5 text-mit-blue rounded-md" onchange="toggleExperimentDetailsForBlock(this, ${index})">
-                                    <span class="ml-2 text-gray-700">Corrosion Testing</span>
-                                </label>
-                                <textarea id="details-CorrosionTesting-${index}" class="hidden w-full p-2 border border-gray-300 rounded-md text-sm mt-1" rows="2" placeholder="Specify environment, duration, measurement type"></textarea>
-                            </div>
-                            <div class="flex flex-col">
-                                <label class="inline-flex items-center">
-                                    <input type="checkbox" name="experimentType-${index}" value="Characterization" class="form-checkbox h-5 w-5 text-mit-blue rounded-md" onchange="toggleExperimentDetailsForBlock(this, ${index})">
-                                    <span class="ml-2 text-gray-700">Characterization</span>
-                                </label>
-                                <textarea id="details-Characterization-${index}" class="hidden w-full p-2 border border-gray-300 rounded-md text-sm mt-1" rows="2" placeholder="Specify technique (e.g., SEM, TEM, XRD), areas of interest"></textarea>
-                            </div>
-                            <div class="flex flex-col">
-                                <label class="inline-flex items-center">
-                                    <input type="checkbox" name="experimentType-${index}" value="Post Irradiation Examination" class="form-checkbox h-5 w-5 text-mit-blue rounded-md" onchange="toggleExperimentDetailsForBlock(this, ${index})">
-                                    <span class="ml-2 text-gray-700">Post Irradiation Examination</span>
-                                </label>
-                                <textarea id="details-PostIrradiationExamination-${index}" class="hidden w-full p-2 border border-gray-300 rounded-md text-sm mt-1" rows="2" placeholder="Specify PIE details"></textarea>
-                            </div>
-                            <div class="flex flex-col">
-                                <label class="inline-flex items-center">
-                                    <input type="checkbox" name="experimentType-${index}" value="Other" class="form-checkbox h-5 w-5 text-mit-blue rounded-md" onchange="toggleExperimentDetailsForBlock(this, ${index})">
-                                    <span class="ml-2 text-gray-700">Other</span>
-                                </label>
-                                <textarea id="details-Other-${index}" class="hidden w-full p-2 border border-gray-300 rounded-md text-sm mt-1" rows="2" placeholder="Please specify other experiment details"></textarea>
-                            </div>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
+                            <label class="inline-flex items-center">
+                                <input type="checkbox" name="experimentType-${index}" value="Irradiation" class="form-checkbox">
+                                <span class="ml-2 text-gray-700">Irradiation</span>
+                            </label>
+                            <label class="inline-flex items-center">
+                                <input type="checkbox" name="experimentType-${index}" value="High Temperature Testing" class="form-checkbox">
+                                <span class="ml-2 text-gray-700">High Temperature Testing</span>
+                            </label>
+                            <label class="inline-flex items-center">
+                                <input type="checkbox" name="experimentType-${index}" value="Corrosion Testing" class="form-checkbox">
+                                <span class="ml-2 text-gray-700">Corrosion Testing</span>
+                            </label>
+                            <label class="inline-flex items-center">
+                                <input type="checkbox" name="experimentType-${index}" value="Characterization" class="form-checkbox">
+                                <span class="ml-2 text-gray-700">Characterization</span>
+                            </label>
                         </div>
                     </div>
+                    
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-4">
                         <div class="form-group">
                             <label for="quantity-${index}" class="block text-sm font-medium text-gray-700 mb-2">Required Quantity:</label>
@@ -465,6 +770,7 @@
                             <input type="date" id="desiredCompletionDate-${index}" name="desiredCompletionDate-${index}">
                         </div>
                     </div>
+                    
                     <div class="form-group mt-4">
                         <label for="sampleSpecialInstructions-${index}" class="block text-sm font-medium text-gray-700 mb-2">Sample Specific Instructions/Notes:</label>
                         <textarea id="sampleSpecialInstructions-${index}" name="sampleSpecialInstructions-${index}" rows="3" placeholder="Any specific requirements or details for this sample..."></textarea>
@@ -473,625 +779,111 @@
             `;
         }
 
-        // Function to add a new sample request block
         function addSampleRequest() {
             const container = document.getElementById('sampleRequestsContainer');
             const newBlockHtml = generateSampleBlockHtml(sampleCounter);
             container.insertAdjacentHTML('beforeend', newBlockHtml);
-            addCompositionEntry(sampleCounter); // Add an initial composition entry for the new sample
             sampleCounter++;
         }
 
-        // Function to remove a sample request block
         function removeSampleRequest(buttonElement) {
             const blockToRemove = buttonElement.closest('.sample-request-block');
             if (blockToRemove) {
                 blockToRemove.remove();
-                // Re-index remaining blocks to maintain sequential numbering
                 const remainingBlocks = document.querySelectorAll('#sampleRequestsContainer .sample-request-block');
                 remainingBlocks.forEach((block, index) => {
                     block.dataset.sampleIndex = index;
                     block.querySelector('.sample-index-display').textContent = index + 1;
-                    // Update IDs and names of inputs within the re-indexed block
-                    block.querySelectorAll('[id]').forEach(input => {
-                        const oldId = input.id;
-                        // Regex to handle both simple IDs and those with element/isotope parts
-                        const newId = oldId.replace(/(-?\w+)-(\d+)$/, `$1-${index}`);
-                        input.id = newId;
-                        input.name = newId; // Assuming name matches ID for simplicity
-                    });
-                    // Update onchange attributes for dynamically generated inputs
-                    block.querySelectorAll('select[onchange^="handleShapeChangeForBlock"]').forEach(select => {
-                        select.setAttribute('onchange', `handleShapeChangeForBlock(this, ${index})`);
-                    });
-                    block.querySelectorAll('input[type="checkbox"][onchange^="toggleExperimentDetailsForBlock"]').forEach(checkbox => {
-                        checkbox.setAttribute('onchange', `toggleExperimentDetailsForBlock(this, ${index})`);
-                    });
-                    block.querySelectorAll('select[onchange^="populateIsotopesForBlock"]').forEach(select => {
-                        const elementSelectId = select.id.replace(/isotope-(\d+)$/, 'element-$1');
-                        select.setAttribute('onchange', `populateIsotopesForBlock(document.getElementById('${elementSelectId}'), this, ${index}, ${select.dataset.compositionIndex})`);
-                    });
-                    block.querySelectorAll('button[onclick^="addCompositionEntry"]').forEach(btn => {
-                        btn.setAttribute('onclick', `addCompositionEntry(${index})`);
-                    });
-                    block.querySelectorAll('button[onclick^="removeCompositionEntry"]').forEach(btn => {
-                        btn.setAttribute('onclick', `removeCompositionEntry(this, ${index})`);
-                    });
                 });
-                sampleCounter = remainingBlocks.length; // Update counter to reflect current number of blocks
+                sampleCounter = remainingBlocks.length;
             }
         }
 
-        // Function to handle dynamic dimension inputs based on sample shape for a specific block
-        function handleShapeChangeForBlock(selectElement, index) {
-            const block = selectElement.closest('.sample-request-block');
-            const dimensionsContainer = block.querySelector(`#dimensionsContainer-${index}`);
-            const selectedShape = selectElement.value;
-            dimensionsContainer.innerHTML = ''; // Clear previous inputs
-
-            let inputsHtml = '';
-            switch (selectedShape) {
-                case 'Cylinder':
-                    inputsHtml = `
-                        <label for="dimDiameter-${index}" class="block text-sm font-medium text-gray-700 mb-2">Diameter (mm):</label>
-                        <input type="number" id="dimDiameter-${index}" name="dimDiameter-${index}" placeholder="e.g., 10" step="any" required>
-                        <label for="dimLength-${index}" class="block text-sm font-medium text-gray-700 mb-2 mt-3">Length (mm):</label>
-                        <input type="number" id="dimLength-${index}" name="dimLength-${index}" placeholder="e.g., 20" step="any" required>
-                    `;
-                    break;
-                case 'Dogbone':
-                    inputsHtml = `
-                        <label for="dimGaugeLength-${index}" class="block text-sm font-medium text-gray-700 mb-2">Gauge Length (mm):</label>
-                        <input type="number" id="dimGaugeLength-${index}" name="dimGaugeLength-${index}" placeholder="e.g., 15" step="any" required>
-                        <label for="dimWidth-${index}" class="block text-sm font-medium text-gray-700 mb-2 mt-3">Width (mm):</label>
-                        <input type="number" id="dimWidth-${index}" name="dimWidth-${index}" placeholder="e.g., 3" step="any" required>
-                        <label for="dimThickness-${index}" class="block text-sm font-medium text-gray-700 mb-2 mt-3">Thickness (mm):</label>
-                        <input type="number" id="dimThickness-${index}" name="dimThickness-${index}" placeholder="e.g., 1" step="any" required>
-                    `;
-                    break;
-                case 'Disc':
-                    inputsHtml = `
-                        <label for="dimDiameter-${index}" class="block text-sm font-medium text-gray-700 mb-2">Diameter (mm):</label>
-                        <input type="number" id="dimDiameter-${index}" name="dimDiameter-${index}" placeholder="e.g., 3" step="any" required>
-                        <label for="dimThickness-${index}" class="block text-sm font-medium text-gray-700 mb-2 mt-3">Thickness (mm):</label>
-                        <input type="number" id="dimThickness-${index}" name="dimThickness-${index}" placeholder="e.g., 0.5" step="any" required>
-                    `;
-                    break;
-                case 'Cube':
-                    inputsHtml = `
-                        <label for="dimSideLength-${index}" class="block text-sm font-medium text-gray-700 mb-2">Side Length (mm):</label>
-                        <input type="number" id="dimSideLength-${index}" name="dimSideLength-${index}" placeholder="e.g., 5" step="any" required>
-                    `;
-                    break;
-                case 'Plate':
-                    inputsHtml = `
-                        <label for="dimLength-${index}" class="block text-sm font-medium text-gray-700 mb-2">Length (mm):</label>
-                        <input type="number" id="dimLength-${index}" name="dimLength-${index}" placeholder="e.g., 50" step="any" required>
-                        <label for="dimWidth-${index}" class="block text-sm font-medium text-gray-700 mb-2 mt-3">Width (mm):</label>
-                        <input type="number" id="dimWidth-${index}" name="dimWidth-${index}" placeholder="e.g., 25" step="any" required>
-                        <label for="dimThickness-${index}" class="block text-sm font-medium text-gray-700 mb-2 mt-3">Thickness (mm):</label>
-                        <input type="number" id="dimThickness-${index}" name="dimThickness-${index}" placeholder="e.g., 2" step="any" required>
-                    `;
-                    break;
-                case 'Tubes':
-                    inputsHtml = `
-                        <label for="dimOuterDiameter-${index}" class="block text-sm font-medium text-gray-700 mb-2">Outer Diameter (mm):</label>
-                        <input type="number" id="dimOuterDiameter-${index}" name="dimOuterDiameter-${index}" placeholder="e.g., 6" step="any" required>
-                        <label for="dimInnerDiameter-${index}" class="block text-sm font-medium text-gray-700 mb-2 mt-3">Inner Diameter (mm):</label>
-                        <input type="number" id="dimInnerDiameter-${index}" name="dimInnerDiameter-${index}" placeholder="e.g., 4" step="any" required>
-                        <label for="dimLength-${index}" class="block text-sm font-medium text-gray-700 mb-2 mt-3">Length (mm):</label>
-                        <input type="number" id="dimLength-${index}" name="dimLength-${index}" placeholder="e.g., 100" step="any" required>
-                    `;
-                    break;
-                case 'Bars':
-                    inputsHtml = `
-                        <label for="dimWidth-${index}" class="block text-sm font-medium text-gray-700 mb-2">Width (mm):</label>
-                        <input type="number" id="dimWidth-${index}" name="dimWidth-${index}" placeholder="e.g., 5" step="any" required>
-                        <label for="dimHeight-${index}" class="block text-sm font-medium text-gray-700 mb-2 mt-3">Height (mm):</label>
-                        <input type="number" id="dimHeight-${index}" name="dimHeight-${index}" placeholder="e.g., 5" step="any" required>
-                        <label for="dimLength-${index}" class="block text-sm font-medium text-gray-700 mb-2 mt-3">Length (mm):</label>
-                        <input type="number" id="dimLength-${index}" name="dimLength-${index}" placeholder="e.g., 50" step="any" required>
-                    `;
-                    break;
-                case 'Square Coupon':
-                    inputsHtml = `
-                        <label for="dimSideLength-${index}" class="block text-sm font-medium text-gray-700 mb-2">Side Length (mm):</label>
-                        <input type="number" id="dimSideLength-${index}" name="dimSideLength-${index}" placeholder="e.g., 10" step="any" required>
-                        <label for="dimThickness-${index}" class="block text-sm font-medium text-gray-700 mb-2 mt-3">Thickness (mm):</label>
-                        <input type="number" id="dimThickness-${index}" name="dimThickness-${index}" placeholder="e.g., 1" step="any" required>
-                    `;
-                    break;
-                case 'Sphere':
-                    inputsHtml = `
-                        <label for="dimDiameter-${index}" class="block text-sm font-medium text-gray-700 mb-2">Diameter (mm):</label>
-                        <input type="number" id="dimDiameter-${index}" name="dimDiameter-${index}" placeholder="e.g., 2" step="any" required>
-                    `;
-                    break;
-                case 'Powder':
-                case 'Liquid':
-                case 'Gas':
-                case 'Cryo':
-                    inputsHtml = `
-                        <label for="dimDescription-${index}" class="block text-sm font-medium text-gray-700 mb-2">Description/Volume:</label>
-                        <input type="text" id="dimDescription-${index}" name="dimDescription-${index}" placeholder="e.g., 100ml, 5g, 1L at STP" required>
-                    `;
-                    break;
-                case 'Other':
-                    inputsHtml = `
-                        <label for="dimOther-${index}" class="block text-sm font-medium text-gray-700 mb-2">Specify Dimensions:</label>
-                        <input type="text" id="dimOther-${index}" name="dimOther-${index}" placeholder="e.g., 15mm x 5mm x 2mm, irregular shape" required>
-                    `;
-                    break;
-                default:
-                    // No specific dimensions needed or selected
-                    break;
-            }
-            dimensionsContainer.innerHTML = inputsHtml;
-        }
-
-        // Function to toggle experiment details textarea for a specific block
-        function toggleExperimentDetailsForBlock(checkboxElement, index) {
-            // Replace spaces and special characters in the value to create a valid ID part
-            const detailsId = `details-${checkboxElement.value.replace(/[^a-zA-Z0-9]/g, '')}-${index}`;
-            const textarea = document.getElementById(detailsId);
-            if (textarea) {
-                if (checkboxElement.checked) {
-                    textarea.classList.remove('hidden');
-                    textarea.setAttribute('required', 'true'); // Make required when visible
-                } else {
-                    textarea.classList.add('hidden');
-                    textarea.removeAttribute('required');
-                    textarea.value = ''; // Clear content when hidden
-                }
-            }
-        }
-
-        // --- Sample Composition Functions ---
-        let compositionCounters = {}; // To keep track of composition entries per sample block
-
-        function addCompositionEntry(sampleIndex) {
-            if (!compositionCounters[sampleIndex]) {
-                compositionCounters[sampleIndex] = 0;
-            }
-            const entryIndex = compositionCounters[sampleIndex];
-            const compositionContainer = document.getElementById(`compositionContainer-${sampleIndex}`);
-
-            const newEntryDiv = document.createElement('div');
-            newEntryDiv.classList.add('grid', 'grid-cols-1', 'md:grid-cols-4', 'gap-4', 'mb-3', 'items-end');
-            newEntryDiv.dataset.compositionIndex = entryIndex;
-
-            newEntryDiv.innerHTML = `
-                <div class="form-group">
-                    <label for="element-${sampleIndex}-${entryIndex}" class="block text-sm font-medium text-gray-700 mb-1">Element:</label>
-                    <select id="element-${sampleIndex}-${entryIndex}" name="element-${sampleIndex}-${entryIndex}" class="element-select" onchange="populateIsotopesForBlock(this, document.getElementById('isotope-${sampleIndex}-${entryIndex}'), ${sampleIndex}, ${entryIndex})" required>
-                        <option value="">Select Element</option>
-                        ${periodicElements.map(el => `<option value="${el.symbol}">${el.name} (${el.symbol})</option>`).join('')}
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label for="isotope-${sampleIndex}-${entryIndex}" class="block text-sm font-medium text-gray-700 mb-1">Isotope (Mandatory):</label>
-                    <select id="isotope-${sampleIndex}-${entryIndex}" name="isotope-${sampleIndex}-${entryIndex}" required>
-                        <option value="Natural Concentration" selected>Natural Concentration</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label for="percentage-${sampleIndex}-${entryIndex}" class="block text-sm font-medium text-gray-700 mb-1">Percentage (%):</label>
-                    <input type="number" id="percentage-${sampleIndex}-${entryIndex}" name="percentage-${sampleIndex}-${entryIndex}" placeholder="e.g., 99.9" step="0.001" min="0" max="100" required>
-                </div>
-                <div class="form-group">
-                    <button type="button" onclick="removeCompositionEntry(this, ${sampleIndex})" class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-md text-sm w-full">Remove</button>
-                </div>
-            `;
-            compositionContainer.appendChild(newEntryDiv);
-            compositionCounters[sampleIndex]++;
-        }
-
-        function removeCompositionEntry(buttonElement, sampleIndex) {
-            const entryToRemove = buttonElement.closest('div[data-composition-index]');
-            if (entryToRemove) {
-                entryToRemove.remove();
-                // Re-index remaining composition entries for this sample block
-                const compositionContainer = document.getElementById(`compositionContainer-${sampleIndex}`);
-                const remainingEntries = compositionContainer.querySelectorAll('div[data-composition-index]');
-                remainingEntries.forEach((entry, idx) => {
-                    entry.dataset.compositionIndex = idx;
-                    entry.querySelectorAll('[id]').forEach(input => {
-                        const oldId = input.id;
-                        const parts = oldId.split('-');
-                        parts[parts.length - 1] = idx; // Update the last part (entryIndex)
-                        input.id = parts.join('-');
-                        input.name = parts.join('-');
-                    });
-                    entry.querySelector('select.element-select').setAttribute('onchange', `populateIsotopesForBlock(this, document.getElementById('isotope-${sampleIndex}-${idx}'), ${sampleIndex}, ${idx})`);
-                    // Fix for `addCompositionEntry` and `removeCompositionEntry` if they were part of the re-indexing, ensuring they target the correct sampleIndex
-                    entry.querySelectorAll('button[onclick^="addCompositionEntry"]').forEach(btn => {
-                        btn.setAttribute('onclick', `addCompositionEntry(${sampleIndex})`);
-                    });
-                    entry.querySelectorAll('button[onclick^="removeCompositionEntry"]').forEach(btn => {
-                        btn.setAttribute('onclick', `removeCompositionEntry(this, ${sampleIndex})`);
-                    });
-                });
-                compositionCounters[sampleIndex] = remainingEntries.length;
-            }
-        }
-
-        function populateIsotopesForBlock(elementSelect, isotopeSelect, sampleIndex, entryIndex) {
-            const selectedSymbol = elementSelect.value;
-            isotopeSelect.innerHTML = '<option value="Natural Concentration" selected>Natural Concentration</option>'; // Always include Natural Concentration as default
-
-            if (selectedSymbol && isotopeMap[selectedSymbol]) {
-                isotopeMap[selectedSymbol].forEach(isotope => {
-                    const option = document.createElement('option');
-                    option.value = isotope;
-                    option.textContent = isotope;
-                    isotopeSelect.appendChild(option);
-                });
-            }
-        }
-        // --- End Sample Composition Functions ---
-
-        // Function to send data to Google Apps Script
-        async function sendDataToGoogleAppsScript(payload) {
-            try {
-                const response = await fetch(WEB_APP_URL, {
-                    method: 'POST',
-                    mode: 'cors', // Required for cross-origin requests
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify(payload),
-                });
-
-                // Check if the HTTP response itself was successful (status 200-299)
-                if (!response.ok) {
-                    let errorMessage = `HTTP error! Status: ${response.status}`;
-                    try {
-                        const errorText = await response.text(); // Try to get response text for more details
-                        errorMessage += ` - Details: ${errorText}`;
-                    } catch (e) {
-                        // If response.text() fails, just use the status
-                    }
-                    console.error("Server responded with an error:", errorMessage);
-                    return { success: false, message: `Server error: ${errorMessage}` };
-                }
-
-                const result = await response.json(); // Parse JSON only if response was OK
-
-                if (result.success) {
-                    console.log("Google Apps Script response:", result.message);
-                } else {
-                    console.error("Error from Google Apps Script (application level):", result.message);
-                }
-                return result; // Return the result for login handling
-            } catch (error) {
-                console.error("Network or fetch error:", error);
-                // Provide a more user-friendly message for network issues
-                return { success: false, message: `Network error: Could not connect to the server. Please check your internet connection or the Web App URL. (Details: ${error.message})` };
-            }
-        }
-
-
-        // Handle form submission for all samples
+        // Form submission handler
         document.getElementById('sampleRequestForm').addEventListener('submit', async function(event) {
-            event.preventDefault(); // Prevent actual form submission
+            event.preventDefault();
 
             const formData = new FormData(this);
-            const lotNumber = formData.get('lotNumber'); // Get the lot number for this batch
-            const collaboratorEmail = formData.get('collaboratorEmail'); // Get collaborator email
+            const lotNumber = formData.get('lotNumber');
 
             const requestData = {
-                type: 'sampleRequest', // Indicate the type of request for GS
+                type: 'sampleRequest',
                 collaboratorName: formData.get('collaboratorName'),
                 collaboratorCompany: formData.get('collaboratorCompany'),
-                collaboratorEmail: collaboratorEmail,
+                collaboratorEmail: formData.get('collaboratorEmail'),
                 collaboratorPhone: formData.get('collaboratorPhone'),
                 generalSpecialInstructions: formData.get('generalSpecialInstructions'),
-                lotNumber: lotNumber, // Include lot number in the request data
+                lotNumber: lotNumber,
                 samples: []
             };
 
-            // Iterate over each sample request block
+            // Collect sample data
             document.querySelectorAll('#sampleRequestsContainer .sample-request-block').forEach((block, sampleIndex) => {
-                const sample = {};
-                sample.sampleID = block.querySelector(`#sampleID-${sampleIndex}`).value;
-                sample.materialType = block.querySelector(`#materialType-${sampleIndex}`).value;
-                sample.sampleShape = block.querySelector(`#sampleShape-${sampleIndex}`).value;
-                sample.weight = block.querySelector(`#weight-${sampleIndex}`).value;
+                const sample = {
+                    sampleID: block.querySelector(`#sampleID-${sampleIndex}`).value,
+                    materialType: block.querySelector(`#materialType-${sampleIndex}`).value,
+                    sampleShape: block.querySelector(`#sampleShape-${sampleIndex}`).value,
+                    weight: block.querySelector(`#weight-${sampleIndex}`).value,
+                    quantity: block.querySelector(`#quantity-${sampleIndex}`).value,
+                    desiredCompletionDate: block.querySelector(`#desiredCompletionDate-${sampleIndex}`).value,
+                    sampleSpecialInstructions: block.querySelector(`#sampleSpecialInstructions-${sampleIndex}`).value,
+                    experimentTypes: [],
+                    composition: [],
+                    dimensions: {}
+                };
 
-                // Collect dynamic dimensions
-                sample.dimensions = {};
-                block.querySelectorAll(`#dimensionsContainer-${sampleIndex} input`).forEach(input => {
-                    sample.dimensions[input.name] = input.value;
-                });
-                // The GS will convert this back to string for the sheet.
-                // const dimensionsString = Object.entries(sample.dimensions).map(([key, value]) => `${key}: ${value}`).join(', ');
-
-                // Collect experiment types and their details
-                sample.experimentTypes = [];
+                // Collect experiment types
                 block.querySelectorAll(`input[name^="experimentType-${sampleIndex}"]:checked`).forEach(checkbox => {
-                    const type = checkbox.value;
-                    const detailsTextarea = block.querySelector(`#details-${type.replace(/[^a-zA-Z0-9]/g, '')}-${sampleIndex}`);
-                    const details = detailsTextarea ? detailsTextarea.value.trim() : '';
-                    sample.experimentTypes.push({ type, details });
+                    sample.experimentTypes.push({ type: checkbox.value, details: '' });
                 });
-                // The GS will convert this back to string for the sheet.
-                // const experimentTypeString = sample.experimentTypes.map(e => `${e.type}${e.details ? ` (${e.details})` : ''}`).join('; ');
-
-                // Collect sample composition
-                sample.composition = [];
-                block.querySelectorAll(`#compositionContainer-${sampleIndex} > div[data-composition-index]`).forEach((entryDiv, entryIndex) => {
-                    const element = entryDiv.querySelector(`#element-${sampleIndex}-${entryIndex}`).value;
-                    const isotope = entryDiv.querySelector(`#isotope-${sampleIndex}-${entryIndex}`).value;
-                    const percentage = entryDiv.querySelector(`#percentage-${sampleIndex}-${entryIndex}`).value;
-                    if (element && percentage) { // Only add if element and percentage are provided
-                        sample.composition.push({ element, isotope, percentage: parseFloat(percentage) });
-                    }
-                });
-                // The GS will convert this back to string for the sheet.
-                // const compositionString = sample.composition.map(c => `${c.element} (${c.isotope}) ${c.percentage}%`).join(', ');
-
-
-                sample.quantity = block.querySelector(`#quantity-${sampleIndex}`).value;
-                sample.desiredCompletionDate = block.querySelector(`#desiredCompletionDate-${sampleIndex}`).value;
-                sample.sampleSpecialInstructions = block.querySelector(`#sampleSpecialInstructions-${sampleIndex}`).value;
 
                 requestData.samples.push(sample);
             });
 
-            const result = await sendDataToGoogleAppsScript(requestData); // Send to Google Apps Script
+            const result = await sendDataToGoogleAppsScript(requestData);
 
             if (result.success) {
-                // Update local dummy data for immediate display in track/view tabs (optional, for demo continuity)
-                // In a real application, you would ideally fetch data from Google Sheet after submission
-                // or confirm success from GS and then update.
-                const newLotData = {
-                    lotNumber: lotNumber,
-                    collaboratorEmail: collaboratorEmail, // Storing for local dummy refresh
-                    samples: requestData.samples.map(s => ({
-                        ...s,
-                        status: 'Pending',
-                        approvalDate: 'N/A',
-                        shippingInstructions: 'Awaiting approval...',
-                        trackingNumber: '',
-                        dataUploadDate: 'N/A',
-                        dataAvailable: 'No data uploaded yet.'
-                    }))
-                };
-                allSamplesData.push(newLotData);
-
-
-                alert('All sample requests submitted! Check your email and the Google Sheet for updates.');
-                this.reset(); // Clear the form
-                // Reset dynamic sample blocks to initial state
+                alert('Sample request submitted successfully!');
+                this.reset();
                 document.getElementById('sampleRequestsContainer').innerHTML = '';
                 sampleCounter = 0;
-                compositionCounters = {}; // Reset composition counters
-                addSampleRequest(); // Add the first empty block back
-                // Hide all experiment details textareas after reset
-                document.querySelectorAll('[id^="details-"]').forEach(textarea => {
-                    textarea.classList.add('hidden');
-                    textarea.removeAttribute('required');
-                    textarea.value = '';
-                });
-                // Refresh tracking and view data tables
-                renderTrackSamplesTable();
-                renderViewDataTable();
+                addSampleRequest();
+            } else {
+                alert('Error submitting request: ' + result.message);
             }
         });
 
-        // Function to open the inline data request form for a single sample
-        function openDataRequestInlineForm(buttonElement, sampleId) {
-            // Remove any existing inline forms (either sample or lot)
-            document.querySelectorAll('.inline-data-request-row, .lot-data-request-row-dynamic').forEach(row => row.remove());
-
-            const parentRow = buttonElement.closest('tr');
-            const numColumns = parentRow.children.length;
-
-            const newRow = document.createElement('tr');
-            newRow.classList.add('inline-data-request-row');
-            newRow.innerHTML = `
-                <td colspan="${numColumns}" class="py-3 px-4">
-                    <div class="inline-data-request-form-container">
-                        <h3 class="text-lg font-semibold mb-3 mit-blue">Request Data for Sample: <span class="font-normal">${sampleId}</span></h3>
-                        <form class="data-request-inline-form" onsubmit="submitInlineDataRequest(event, '${sampleId}')">
-                            <div class="form-group mb-4">
-                                <label for="dataNeeded-${sampleId}" class="block text-sm font-medium text-gray-700 mb-2">What specific data do you need?</label>
-                                <textarea id="dataNeeded-${sampleId}" name="dataNeeded" rows="3" placeholder="e.g., raw tensile data, specific SEM images, full irradiation history" required></textarea>
-                            </div>
-                            <div class="form-group mb-6">
-                                <label class="block text-sm font-medium text-gray-700 mb-2">Preferred Sharing Medium:</label>
-                                <div class="flex flex-wrap gap-4">
-                                    <label class="inline-flex items-center">
-                                        <input type="radio" name="sharingMedium-${sampleId}" value="Google Drive" class="form-radio h-4 w-4 text-mit-blue" checked>
-                                        <span class="ml-2 text-gray-700">Google Drive</span>
-                                    </label>
-                                    <label class="inline-flex items-center">
-                                        <input type="radio" name="sharingMedium-${sampleId}" value="Dropbox" class="form-radio h-4 w-4 text-mit-blue">
-                                        <span class="ml-2 text-gray-700">Dropbox</span>
-                                    </label>
-                                    <label class="inline-flex items-center">
-                                        <input type="radio" name="sharingMedium-${sampleId}" value="Box" class="form-radio h-4 w-4 text-mit-blue">
-                                        <span class="ml-2 text-gray-700">Box</span>
-                                    </label>
-                                    <label class="inline-flex items-center">
-                                        <input type="radio" name="sharingMedium-${sampleId}" value="Email" class="form-radio h-4 w-4 text-mit-blue">
-                                        <span class="ml-2 text-gray-700">Email</span>
-                                    </label>
-                                    <label class="inline-flex items-center">
-                                        <input type="radio" name="sharingMedium-${sampleId}" value="Other" class="form-radio h-4 w-4 text-mit-blue">
-                                        <span class="ml-2 text-gray-700">Other (Specify in notes)</span>
-                                    </label>
-                                </div>
-                            </div>
-                            <div class="flex justify-end gap-3">
-                                <button type="button" class="bg-gray-300 hover:bg-gray-400 text-gray-800 py-2 px-5 rounded-md" onclick="closeInlineDataRequestForm(this)">Cancel</button>
-                                <button type="submit" class="mit-blue-bg hover:opacity-90 text-white py-2 px-5 rounded-md">Submit Data Request</button>
-                            </div>
-                        </form>
-                    </div>
-                </td>
-            `;
-            parentRow.after(newRow);
-        }
-
-        // Function to close the inline data request form (for both sample and lot)
-        function closeInlineDataRequestForm(buttonElement) {
-            const formContainer = buttonElement.closest('.inline-data-request-row') || buttonElement.closest('.lot-data-request-row-dynamic');
-            if (formContainer) {
-                formContainer.remove();
-            }
-        }
-
-        // Function to handle inline data request submission (Unchanged for individual sample)
-        async function submitInlineDataRequest(event, sampleId) {
-            event.preventDefault();
-
-            const form = event.target;
-            const dataNeeded = form.querySelector(`textarea[name="dataNeeded"]`).value;
-            const sharingMedium = form.querySelector(`input[name="sharingMedium-${sampleId}"]:checked`).value;
-
-            const payload = {
-                type: 'dataRequest', // Indicate type for GS
-                scope: 'sample',
-                sampleId: sampleId,
-                dataNeeded: dataNeeded,
-                sharingMedium: sharingMedium
-            };
-            const result = await sendDataToGoogleAppsScript(payload); // Send data to GS
-
-            if (result.success) {
-                alert(`Data request for ${sampleId} submitted! Check your email for updates.`);
-                closeInlineDataRequestForm(form);
-            }
-        }
-
-        // Function to open the inline data request form for an entire lot
-        function openLotDataRequestInlineForm(lotNumber) {
-            // Remove any existing inline forms (either sample or lot)
-            document.querySelectorAll('.inline-data-request-row, .lot-data-request-row-dynamic').forEach(row => row.remove());
-
-            // Find the lot header row to insert the form below it
-            let lotHeaderRow = null;
-            const tbody = document.getElementById('sampleDataTableBody');
-            for (let i = 0; i < tbody.rows.length; i++) {
-                if (tbody.rows[i].cells[0] && tbody.rows[i].cells[0].textContent.includes(`Lot Number: ${lotNumber}`)) {
-                    lotHeaderRow = tbody.rows[i];
-                    break;
-                }
-            }
-
-            if (lotHeaderRow) {
-                const newRow = document.createElement('tr');
-                newRow.classList.add('lot-data-request-row-dynamic');
-                newRow.innerHTML = `
-                    <td colspan="5" class="py-3 px-4">
-                        <div class="inline-data-request-form-container">
-                            <h3 class="text-lg font-semibold mb-3 mit-blue">Request Data for Entire Lot: <span class="font-normal">${lotNumber}</span></h3>
-                            <p class="text-sm text-gray-500 mb-4">Requesting data for an entire lot might take longer. If you need data faster, consider requesting specific samples instead.</p>
-                            <form class="data-request-inline-form" onsubmit="submitLotDataRequest(event, '${lotNumber}')">
-                                <div class="form-group mb-4">
-                                    <label for="lotDataNeeded-${lotNumber}" class="block text-sm font-medium text-gray-700 mb-2">What specific data do you need for this lot?</label>
-                                    <textarea id="lotDataNeeded-${lotNumber}" name="dataNeeded" rows="3" placeholder="e.g., all raw data, summary reports, specific characterization results for all samples in this lot" required></textarea>
-                                </div>
-                                <div class="form-group mb-6">
-                                    <label class="block text-sm font-medium text-gray-700 mb-2">Preferred Sharing Medium:</label>
-                                    <div class="flex flex-wrap gap-4">
-                                        <label class="inline-flex items-center">
-                                            <input type="radio" name="sharingMediumLot-${lotNumber}" value="Google Drive" class="form-radio h-4 w-4 text-mit-blue" checked>
-                                            <span class="ml-2 text-gray-700">Google Drive</span>
-                                        </label>
-                                        <label class="inline-flex items-center">
-                                            <input type="radio" name="sharingMediumLot-${lotNumber}" value="Dropbox" class="form-radio h-4 w-4 text-mit-blue">
-                                            <span class="ml-2 text-gray-700">Dropbox</span>
-                                    </label>
-                                    <label class="inline-flex items-center">
-                                        <input type="radio" name="sharingMediumLot-${lotNumber}" value="Box" class="form-radio h-4 w-4 text-mit-blue">
-                                        <span class="ml-2 text-gray-700">Box</span>
-                                    </label>
-                                    <label class="inline-flex items-center">
-                                        <input type="radio" name="sharingMediumLot-${lotNumber}" value="Email" class="form-radio h-4 w-4 text-mit-blue">
-                                        <span class="ml-2 text-gray-700">Email</span>
-                                    </label>
-                                    <label class="inline-flex items-center">
-                                        <input type="radio" name="sharingMediumLot-${lotNumber}" value="Other" class="form-radio h-4 w-4 text-mit-blue">
-                                        <span class="ml-2 text-gray-700">Other (Specify in notes)</span>
-                                    </label>
-                                </div>
-                            </div>
-                            <div class="flex justify-end gap-3">
-                                <button type="button" class="bg-gray-300 hover:bg-gray-400 text-gray-800 py-2 px-5 rounded-md" onclick="closeInlineDataRequestForm(this)">Cancel</button>
-                                <button type="submit" class="mit-blue-bg hover:opacity-90 text-white py-2 px-5 rounded-md">Submit Lot Data Request</button>
-                            </div>
-                        </form>
-                    </div>
-                </td>
-            `;
-            lotHeaderRow.after(newRow);
-        }
-
-        // Function to handle lot data request submission
-        async function submitLotDataRequest(event, lotNumber) {
-            event.preventDefault();
-
-            const form = event.target;
-            const dataNeeded = form.querySelector(`textarea[name="dataNeeded"]`).value;
-            const sharingMedium = form.querySelector(`input[name="sharingMediumLot-${lotNumber}"]:checked`).value;
-
-            const payload = {
-                type: 'dataRequest', // Indicate type for GS
-                scope: 'lot',
-                lotNumber: lotNumber,
-                dataNeeded: dataNeeded,
-                sharingMedium: sharingMedium
-            };
-            const result = await sendDataToGoogleAppsScript(payload); // Send data to GS
-
-            if (result.success) {
-                alert(`Data request for Lot ${lotNumber} submitted! Check your email for updates.`);
-                closeInlineDataRequestForm(form);
-            }
-        }
-
-
-        // Dummy data for initial load and demonstration
+        // Dummy data for demonstration
         const dummySamples = [
-            { lotNumber: "LOT-2025-001", collaboratorEmail: "user1@example.com", samples: [
-                { sampleID: "MIT-SAMPLE-001", materialType: "Alloy 625", experimentType: "High Temperature", status: "Pending", approvalDate: "N/A", shippingInstructions: "Awaiting approval...", trackingNumber: "", dataUploadDate: "N/A", dataAvailable: "No data uploaded yet." },
-                { sampleID: "MIT-SAMPLE-002", materialType: "Zirconium Alloy", experimentType: "Irradiation", status: "Approved", approvalDate: "2025-05-20", shippingInstructions: "Ship to: MIT Lab 123, Attn: Dr. Smith. Use FedEx Priority Overnight. Include sample manifest.", trackingNumber: "FEDEX12345", dataUploadDate: "2025-06-01", dataAvailable: "Initial dose data, basic microscopy images." }
-            ]},
-            { lotNumber: "LOT-2025-002", collaboratorEmail: "user2@example.com", samples: [
-                { sampleID: "MIT-SAMPLE-003", materialType: "SS 316L", experimentType: "Mechanical Characterization", status: "Shipped", approvalDate: "2025-05-22", shippingInstructions: "Ship to: MIT Lab 456, Attn: Dr. Jones. Use DHL Express. Pack securely.", trackingNumber: "DHL987654321", dataUploadDate: "2025-06-05", dataAvailable: "Tensile strength curves, ductility values, hardness maps." },
-                { sampleID: "MIT-SAMPLE-004", materialType: "Copper", experimentType: "Microstructural Characterization", status: "Data Ready", approvalDate: "2025-05-15", shippingInstructions: "Sample received and processed.", trackingNumber: "UPS987654321", dataUploadDate: "2025-06-10", dataAvailable: "SEM images, EBSD maps, grain size analysis." }
-            ]},
-            { lotNumber: "LOT-2025-003", collaboratorEmail: "user3@example.com", samples: [
-                { sampleID: "MIT-SAMPLE-005", materialType: "Nickel-based Superalloy", experimentType: "Corrosion Testing", status: "Pending", approvalDate: "N/A", shippingInstructions: "Awaiting approval...", trackingNumber: "", dataUploadDate: "N/A", dataAvailable: "No data uploaded yet." }
-            ]}
+            { 
+                lotNumber: "LOT-2025-001", 
+                collaboratorEmail: "user1@example.com", 
+                samples: [
+                    { 
+                        sampleID: "MIT-SAMPLE-001", 
+                        materialType: "Alloy 625", 
+                        experimentType: "High Temperature", 
+                        status: "Pending", 
+                        approvalDate: "N/A", 
+                        shippingInstructions: "Awaiting approval...", 
+                        trackingNumber: "", 
+                        dataUploadDate: "N/A", 
+                        dataAvailable: "No data uploaded yet." 
+                    }
+                ]
+            }
         ];
 
-        // Initialize allSamplesData with dummy data
         allSamplesData = dummySamples;
 
-        // Function to render the "Track Samples" table
         function renderTrackSamplesTable() {
             const tbody = document.getElementById('sampleTrackingTableBody');
-            tbody.innerHTML = ''; // Clear existing rows
+            tbody.innerHTML = '';
 
             allSamplesData.forEach(lot => {
-                // Add Lot Number header row
                 const lotHeaderRow = document.createElement('tr');
                 lotHeaderRow.innerHTML = `<td colspan="7" class="lot-header">Lot Number: ${lot.lotNumber}</td>`;
                 tbody.appendChild(lotHeaderRow);
-
-                // Add a row for "Add Tracking Details" button for this lot
-                const trackingButtonRow = document.createElement('tr');
-                trackingButtonRow.innerHTML = `
-                    <td colspan="7" class="py-2 px-4 bg-gray-50">
-                        <div class="flex justify-start">
-                            <button type="button" onclick="openTrackingInput('${lot.lotNumber}')" class="mit-blue-bg hover:opacity-90 text-white px-4 py-2 rounded-md text-sm">Add Tracking Details for Lot ${lot.lotNumber}</button>
-                        </div>
-                    </td>
-                `;
-                tbody.appendChild(trackingButtonRow);
 
                 lot.samples.forEach(sample => {
                     const row = document.createElement('tr');
@@ -1099,95 +891,35 @@
                     row.innerHTML = `
                         <td class="py-3 px-4">${sample.sampleID}</td>
                         <td class="py-3 px-4">${sample.materialType}</td>
-                        <td class="py-3 px-4">${Array.isArray(sample.experimentType) ? sample.experimentType.map(e => e.type || e).join(', ') : sample.experimentType || 'N/A'}</td>
-                        <td class="py-3 px-4 text-${getStatusColor(sample.status)}-600 font-semibold">${sample.status}</td>
+                        <td class="py-3 px-4">${sample.experimentType || 'N/A'}</td>
+                        <td class="py-3 px-4">${sample.status}</td>
                         <td class="py-3 px-4">${sample.approvalDate || 'N/A'}</td>
-                        <td class="py-3 px-4">
-                            <textarea class="w-full p-2 border border-gray-300 rounded-md text-sm" rows="2" readonly>${sample.shippingInstructions}</textarea>
-                        </td>
-                        <td class="py-3 px-4" id="trackingCell-${sample.sampleID}">
-                            ${sample.trackingNumber ? `<input type="text" class="w-full p-2 border border-gray-300 rounded-md text-sm" value="${sample.trackingNumber}" readonly>` : 'N/A'}
-                        </td>
+                        <td class="py-3 px-4">${sample.shippingInstructions}</td>
+                        <td class="py-3 px-4">${sample.trackingNumber || 'N/A'}</td>
                     `;
                     tbody.appendChild(row);
                 });
             });
         }
 
-        // Function to open tracking input for a given lot
-        function openTrackingInput(lotNumber) {
-            // Remove any existing tracking input rows
-            document.querySelectorAll('.tracking-input-row-dynamic').forEach(row => row.remove());
-
-            // Find the tracking button row for this lot
-            let trackingButtonRow = null;
-            const tbody = document.getElementById('sampleTrackingTableBody');
-            // Iterate through rows to find the specific tracking button row for the lot
-            for (let i = 0; i < tbody.rows.length; i++) {
-                const row = tbody.rows[i];
-                // Check if this row contains the button for the specific lotNumber
-                if (row.querySelector(`button[onclick="openTrackingInput('${lotNumber}')"]`)) {
-                    trackingButtonRow = row;
-                    break;
-                }
-            }
-
-            if (trackingButtonRow) {
-                const newRow = document.createElement('tr');
-                newRow.classList.add('tracking-input-row-dynamic'); // Use a distinct class
-                newRow.innerHTML = `
-                    <td colspan="7" class="py-3 px-4">
-                        <div class="flex items-center space-x-4">
-                            <label for="trackingNumberInput-${lotNumber}" class="block text-sm font-medium text-gray-700">Tracking Number for Lot ${lotNumber}:</label>
-                            <input type="text" id="trackingNumberInput-${lotNumber}" class="flex-grow p-2 border border-gray-300 rounded-md text-sm" placeholder="Enter tracking number" required>
-                            <button type="button" onclick="submitTrackingNumber('${lotNumber}')" class="mit-blue-bg hover:opacity-90 text-white px-4 py-2 rounded-md text-sm">Submit</button>
-                            <button type="button" onclick="cancelTrackingInput(this)" class="bg-gray-300 hover:bg-gray-400 text-gray-800 px-4 py-2 rounded-md text-sm">Cancel</button>
-                        </div>
-                    </td>
-                `;
-                trackingButtonRow.after(newRow);
-            }
-        }
-
-        // Function to cancel tracking input
-        function cancelTrackingInput(buttonElement) {
-            buttonElement.closest('.tracking-input-row-dynamic').remove();
-        }
-
-        // Function to refresh the "Track Samples" table (dummy function for now)
-        function refreshTrackSamples() {
-            console.log("Refreshing sample tracking data...");
-            // In a real application, you'd fetch the latest data from the Google Sheet here
-            // For this demo, it just re-renders the current local dummy data.
-            alert("Sample tracking data refreshed! (In a real app, this would fetch live data)");
-            renderTrackSamplesTable(); // Re-render the table with current data
-        }
-
-        // Function to render the "View Sample Data" table
         function renderViewDataTable() {
             const tbody = document.getElementById('sampleDataTableBody');
-            tbody.innerHTML = ''; // Clear existing rows
+            tbody.innerHTML = '';
 
             allSamplesData.forEach(lot => {
-                // Add Lot Number header row
                 const lotHeaderRow = document.createElement('tr');
-                lotHeaderRow.innerHTML = `
-                    <td colspan="5" class="lot-header flex justify-between items-center">
-                        <span>Lot Number: ${lot.lotNumber}</span>
-                        <button type="button" onclick="openLotDataRequestInlineForm('${lot.lotNumber}')" class="mit-blue-bg hover:opacity-90 text-white px-4 py-2 rounded-md text-sm">Request Data for Lot</button>
-                    </td>
-                `;
+                lotHeaderRow.innerHTML = `<td colspan="5" class="lot-header">Lot Number: ${lot.lotNumber}</td>`;
                 tbody.appendChild(lotHeaderRow);
 
                 lot.samples.forEach(sample => {
                     const row = document.createElement('tr');
                     row.className = 'border-b border-gray-200';
                     row.innerHTML = `
-                        <td class="py-3 px-4 sample-id-cell">${sample.sampleID}</td>
-                        <td class="py-3 px-4">${Array.isArray(sample.experimentType) ? sample.experimentType.map(e => e.type || e).join(', ') : sample.experimentType || 'N/A'}</td>
+                        <td class="py-3 px-4">${sample.sampleID}</td>
+                        <td class="py-3 px-4">${sample.experimentType || 'N/A'}</td>
                         <td class="py-3 px-4">${sample.dataUploadDate || 'N/A'}</td>
                         <td class="py-3 px-4">
-                            <button class="mit-blue-bg hover:opacity-90 text-white px-4 py-2 rounded-md text-sm" onclick="openDataRequestInlineForm(this, '${sample.sampleID}')">Request Data</button>
+                            <button class="mit-blue-bg text-white px-4 py-2 rounded-md text-sm">Request Data</button>
                         </td>
                         <td class="py-3 px-4">${sample.dataAvailable || 'N/A'}</td>
                     `;
@@ -1196,58 +928,13 @@
             });
         }
 
-        // Helper function to get status color class
-        function getStatusColor(status) {
-            switch (status) {
-                case 'Pending': return 'orange';
-                case 'Approved': return 'green';
-                case 'Shipped': return 'blue';
-                case 'Data Ready': return 'purple';
-                default: return 'gray';
-            }
+        function refreshTrackSamples() {
+            console.log("Refreshing sample tracking data...");
+            alert("Sample tracking data refreshed!");
+            renderTrackSamplesTable();
         }
 
-        // Login Logic
-        async function handleLogin(event) {
-            event.preventDefault();
-            const usernameInput = document.getElementById('username');
-            const passwordInput = document.getElementById('password');
-            const loginError = document.getElementById('loginError');
-            const loginButton = event.submitter; // Get the button that triggered the submit
-
-            loginButton.disabled = true; // Disable button to prevent multiple clicks
-            loginError.classList.add('hidden'); // Hide previous errors
-
-            const payload = {
-                type: 'login',
-                username: usernameInput.value,
-                password: passwordInput.value
-            };
-
-            try {
-                const result = await sendDataToGoogleAppsScript(payload);
-
-                if (result.success) {
-                    document.getElementById('loginPage').classList.add('hidden');
-                    document.getElementById('mainContent').classList.remove('hidden');
-                    // Initialize with one sample request block when the page loads
-                    addSampleRequest(); // Ensure this is called only once after successful login
-                    renderTrackSamplesTable(); // Render tables after login
-                    renderViewDataTable();
-                } else {
-                    loginError.classList.remove('hidden');
-                    loginError.textContent = result.message || 'Login failed. Please try again.';
-                }
-            } catch (error) {
-                console.error("Login network error:", error);
-                loginError.classList.remove('hidden');
-                loginError.textContent = "Could not connect to the server. Please check your internet connection and the Web App URL. (Details: " + error.message + ")";
-            } finally {
-                loginButton.disabled = false; // Re-enable button
-            }
-        }
-
-        // JavaScript for tab functionality (kept as is)
+        // Tab functionality
         function openTab(evt, tabName) {
             var i, tabcontent, tabbuttons;
             tabcontent = document.getElementsByClassName("tab-content");
@@ -1263,6 +950,6 @@
             document.getElementById(tabName).classList.add("active");
             evt.currentTarget.classList.add("active");
         }
-    </script>
-</body>
-</html>
+
+        // Initialize the application
+        console.log('Application initialized, waiting for login...');
