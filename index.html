@@ -95,22 +95,9 @@
         .tracking-input-row-dynamic, .lot-data-request-row-dynamic { /* Updated class name */
             @apply bg-gray-50;
         }
-
-        /* Message Box Styling */
-        #messageBox {
-            @apply fixed bottom-4 right-4 bg-blue-600 text-white p-4 rounded-lg shadow-lg z-50 hidden;
-        }
-        #messageBox.success {
-            @apply bg-green-600;
-        }
-        #messageBox.error {
-            @apply bg-red-600;
-        }
     </style>
 </head>
 <body>
-    <div id="messageBox" class="hidden"></div>
-
     <div id="loginPage" class="login-container">
         <div class="login-card">
             <h2 class="text-2xl font-bold text-center mb-6 mit-blue">Login to MIT Nuclear Innovations Fission Technology Sample Management</h2>
@@ -237,14 +224,13 @@
     </div>
 
     <script>
+        // IMPORTANT: Replace 'YOUR_WEB_APP_URL_HERE' with the actual URL of your deployed Google Apps Script web app.
+        const GS_WEB_APP_URL = 'YOUR_WEB_APP_URL_HERE';
+
         let sampleCounter = 0; // Global counter for unique sample block IDs
-        // Removed allSamplesData as data will now be fetched from GS
-        // const ADMIN_EMAIL = 'arunmdm@mit.edu'; // Admin email is now handled in GS
+        const ADMIN_EMAIL = 'arunmdm@mit.edu'; // Admin email for notifications
 
-        // IMPORTANT: Replace this with your deployed Google Apps Script Web App URL
-        const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbzoituBOzpu7o7jS8RyiREHAxFbRyKOGrBhx_tNH-bj_GBBAY5Q6EX5AOK7_oeE6KOc/exec';
-
-        // Data for periodic table elements and their isotopes (kept as is)
+        // Data for periodic table elements and their isotopes
         const periodicElements = [
             { symbol: "H", name: "Hydrogen", isotopes: ["1H", "2H", "3H"] },
             { symbol: "He", name: "Helium", isotopes: ["3He", "4He"] },
@@ -306,7 +292,7 @@
             { symbol: "Ce", name: "Cerium", isotopes: ["136Ce", "138Ce", "140Ce", "142Ce"] },
             { symbol: "Pr", name: "Praseodymium", isotopes: ["141Pr"] },
             { symbol: "Nd", name: "Neodymium", isotopes: ["142Nd", "143Nd", "144Nd", "145Nd", "146Nd", "148Nd", "150Nd"] },
-            { symbol: "Pm", name: "Promethium", isotopes: ["145Pm", "147Pm"] },
+            { symbol: "Pm", name: "Promethium", isotopes: ["145Pm", "147Pm"] }, // Most stable isotopes
             { symbol: "Sm", name: "Samarium", isotopes: ["144Sm", "147Sm", "148Sm", "149Sm", "150Sm", "152Sm", "154Sm"] },
             { symbol: "Eu", name: "Europium", isotopes: ["151Eu", "153Eu"] },
             { symbol: "Gd", name: "Gadolinium", isotopes: ["152Gd", "154Gd", "155Gd", "156Gd", "157Gd", "158Gd", "160Gd"] },
@@ -330,80 +316,474 @@
             { symbol: "Pb", name: "Lead", isotopes: ["204Pb", "206Pb", "207Pb", "208Pb"] },
             { symbol: "Bi", name: "Bismuth", isotopes: ["209Bi"] },
             { symbol: "Po", name: "Polonium", isotopes: ["209Po", "210Po"] }, // Most stable isotopes
-            { symbol: "At", name: "Astatine", isotopes: ["210At"] },
-            { symbol: "Rn", name: "Radon", isotopes: ["222Rn"] },
-            { symbol: "Fr", name: "Francium", isotopes: ["223Fr"] },
-            { symbol: "Ra", name: "Radium", isotopes: ["226Ra"] },
-            { symbol: "Ac", name: "Actinium", isotopes: ["227Ac"] },
-            { symbol: "Th", name: "Thorium", isotopes: ["230Th", "232Th"] },
-            { symbol: "Pa", name: "Protactinium", isotopes: ["231Pa"] },
-            { symbol: "U", name: "Uranium", isotopes: ["233U", "234U", "235U", "238U"] },
-            { symbol: "Np", name: "Neptunium", isotopes: ["237Np"] },
+            { symbol: "At", name: "Astatine", isotopes: ["210At"] }, // Most stable isotope
+            { symbol: "Rn", name: "Radon", isotopes: ["222Rn"] }, // Most stable isotope
+            { symbol: "Fr", name: "Francium", isotopes: ["223Fr"] }, // Most stable isotope
+            { symbol: "Ra", name: "Radium", isotopes: ["226Ra"] }, // Most stable isotope
+            { symbol: "Ac", name: "Actinium", isotopes: ["227Ac"] }, // Most stable isotope
+            { symbol: "Th", name: "Thorium", isotopes: ["232Th"] },
+            { symbol: "Pa", name: "Protactinium", isotopes: ["231Pa"] }, // Most stable isotope
+            { symbol: "U", name: "Uranium", isotopes: ["233U", "234U", "235U", "236U", "238U"] },
+            { symbol: "Np", name: "Neptunium", isotopes: ["237Np"] }, // Most stable isotope
             { symbol: "Pu", name: "Plutonium", isotopes: ["238Pu", "239Pu", "240Pu", "241Pu", "242Pu", "244Pu"] },
             { symbol: "Am", name: "Americium", isotopes: ["241Am", "243Am"] },
             { symbol: "Cm", name: "Curium", isotopes: ["242Cm", "244Cm", "245Cm", "246Cm", "247Cm", "248Cm"] },
-            { symbol: "Bk", name: "Berkelium", isotopes: ["247Bk"] },
+            { symbol: "Bk", name: "Berkelium", isotopes: ["247Bk"] }, // Most stable isotope
             { symbol: "Cf", name: "Californium", isotopes: ["249Cf", "250Cf", "251Cf", "252Cf"] },
-            { symbol: "Es", name: "Einsteinium", isotopes: ["252Es"] },
-            { symbol: "Fm", name: "Fermium", isotopes: ["257Fm"] },
-            { symbol: "Md", name: "Mendelevium", isotopes: ["258Md"] },
-            { symbol: "No", name: "Nobelium", isotopes: ["259No"] },
-            { symbol: "Lr", name: "Lawrencium", isotopes: ["262Lr"] },
-            { symbol: "Rf", name: "Rutherfordium", isotopes: ["261Rf"] },
-            { symbol: "Db", name: "Dubnium", isotopes: ["262Db"] },
-            { symbol: "Sg", name: "Seaborgium", isotopes: ["266Sg"] },
-            { symbol: "Bh", name: "Bohrium", isotopes: ["264Bh"] },
-            { symbol: "Hs", name: "Hassium", isotopes: ["269Hs"] },
-            { symbol: "Mt", name: "Meitnerium", isotopes: ["276Mt"] },
-            { symbol: "Ds", name: "Darmstadtium", isotopes: ["281Ds"] },
-            { symbol: "Rg", name: "Roentgenium", isotopes: ["280Rg"] },
-            { symbol: "Cn", name: "Copernicium", isotopes: ["285Cn"] },
-            { symbol: "Nh", name: "Nihonium", isotopes: ["286Nh"] },
-            { symbol: "Fl", name: "Flerovium", isotopes: ["289Fl"] },
-            { symbol: "Mc", name: "Moscovium", isotopes: ["290Mc"] },
-            { symbol: "Lv", name: "Livermorium", isotopes: ["293Lv"] },
-            { symbol: "Ts", name: "Tennessine", isotopes: ["294Ts"] },
-            { symbol: "Og", name: "Oganesson", isotopes: ["294Og"] }
+            { symbol: "Es", name: "Einsteinium", isotopes: ["252Es"] }, // Most stable isotope
+            { symbol: "Fm", name: "Fermium", isotopes: ["257Fm"] }, // Most stable isotope
+            { symbol: "Md", name: "Mendelevium", isotopes: ["258Md"] }, // Most stable isotope
+            { symbol: "No", name: "Nobelium", isotopes: ["259No"] }, // Most stable isotope
+            { symbol: "Lr", name: "Lawrencium", isotopes: ["262Lr"] }, // Most stable isotope
+            { symbol: "Rf", name: "Rutherfordium", isotopes: ["261Rf"] }, // Most stable isotope
+            { symbol: "Db", name: "Dubnium", isotopes: ["268Db"] }, // Most stable isotope
+            { symbol: "Sg", name: "Seaborgium", isotopes: ["271Sg"] }, // Most stable isotope
+            { symbol: "Bh", name: "Bohrium", isotopes: ["270Bh"] }, // Most stable isotope
+            { symbol: "Hs", name: "Hassium", isotopes: ["277Hs"] }, // Most stable isotope
+            { symbol: "Mt", name: "Meitnerium", isotopes: ["276Mt"] }, // Most stable isotope
+            { symbol: "Ds", name: "Darmstadtium", isotopes: ["281Ds"] }, // Most stable isotope
+            { symbol: "Rg", name: "Roentgenium", isotopes: ["280Rg"] }, // Most stable isotope
+            { symbol: "Cn", name: "Copernicium", isotopes: ["285Cn"] }, // Most stable isotope
+            { symbol: "Nh", name: "Nihonium", isotopes: ["286Nh"] }, // Most stable isotope
+            { symbol: "Fl", name: "Flerovium", isotopes: ["289Fl"] }, // Most stable isotope
+            { symbol: "Mc", name: "Moscovium", isotopes: ["290Mc"] }, // Most stable isotope
+            { symbol: "Lv", name: "Livermorium", isotopes: ["293Lv"] }, // Most stable isotope
+            { symbol: "Ts", name: "Tennessine", isotopes: ["294Ts"] }, // Most stable isotope
+            { symbol: "Og", name: "Oganesson", isotopes: ["294Og"] }  // Most stable isotope
         ];
 
-        // Function to display messages to the user
-        function showMessage(message, type = 'info') {
-            const messageBox = document.getElementById('messageBox');
-            messageBox.textContent = message;
-            messageBox.className = 'fixed bottom-4 right-4 p-4 rounded-lg shadow-lg z-50'; // Reset classes
-            messageBox.classList.add(type); // Add type class (success, error, info)
-            messageBox.classList.remove('hidden');
-            setTimeout(() => {
-                messageBox.classList.add('hidden');
-            }, 5000); // Hide after 5 seconds
+        // Function to initialize Google Sheet by calling GS backend
+        async function initializeGoogleSheet() {
+            try {
+                const response = await fetch(GS_WEB_APP_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ action: 'initializeSpreadsheet' }),
+                });
+                const result = await response.json();
+                if (result.success) {
+                    console.log('Google Sheet initialized:', result.data);
+                } else {
+                    console.error('Failed to initialize Google Sheet:', result.error);
+                }
+            } catch (error) {
+                console.error('Error initializing Google Sheet:', error);
+            }
         }
 
-        // Login handler (kept as is, but now calls GS init)
+        // Function to populate isotope options based on selected element
+        function populateIsotopes(selectElement) {
+            const elementSymbol = selectElement.value;
+            const blockId = selectElement.closest('.sample-request-block').id;
+            const isotopeSelect = document.getElementById(`isotope-${blockId}`);
+            isotopeSelect.innerHTML = '<option value="">Select Isotope</option>'; // Clear existing options
+
+            const selectedElement = periodicElements.find(el => el.symbol === elementSymbol);
+            if (selectedElement) {
+                selectedElement.isotopes.forEach(isotope => {
+                    const option = document.createElement('option');
+                    option.value = isotope;
+                    option.textContent = isotope;
+                    isotopeSelect.appendChild(option);
+                });
+            }
+        }
+
+        // Function to add a row for composition input
+        function addCompositionRow(buttonElement) {
+            const compositionTableBody = buttonElement.closest('.sample-request-block').querySelector('.composition-table tbody');
+            const newRow = document.createElement('tr');
+            newRow.innerHTML = `
+                <td>
+                    <select class="element-select p-2 border border-gray-300 rounded-md w-full" onchange="populateIsotopes(this)">
+                        <option value="">Select Element</option>
+                        ${periodicElements.map(el => `<option value="${el.symbol}">${el.name} (${el.symbol})</option>`).join('')}
+                    </select>
+                </td>
+                <td>
+                    <select class="isotope-select p-2 border border-gray-300 rounded-md w-full">
+                        <option value="">Select Isotope</option>
+                    </select>
+                </td>
+                <td>
+                    <input type="number" step="0.01" min="0" class="percentage-input p-2 border border-gray-300 rounded-md w-full" placeholder="%" required>
+                </td>
+                <td>
+                    <button type="button" onclick="removeCompositionRow(this)" class="text-red-500 hover:text-red-700 text-sm font-bold">Remove</button>
+                </td>
+            `;
+            compositionTableBody.appendChild(newRow);
+        }
+
+        // Function to remove a row from composition input
+        function removeCompositionRow(buttonElement) {
+            buttonElement.closest('tr').remove();
+        }
+
+        // Function to add a new sample request block
+        function addSampleRequest() {
+            sampleCounter++;
+            const container = document.getElementById('sampleRequestsContainer');
+            const newBlock = document.createElement('div');
+            newBlock.id = `sampleBlock-${sampleCounter}`;
+            newBlock.classList.add('sample-request-block');
+            newBlock.innerHTML = `
+                <button type="button" class="remove-button" onclick="removeSampleRequest('${newBlock.id}')">Remove Sample</button>
+                <h3 class="text-xl font-semibold mb-4 mit-blue">Sample #${sampleCounter} Details</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div class="form-group">
+                        <label for="sampleId-${sampleCounter}" class="block text-sm font-medium text-gray-700 mb-2">Sample ID:</label>
+                        <input type="text" id="sampleId-${sampleCounter}" name="sampleId-${sampleCounter}" placeholder="e.g., SAMPLE-001" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="materialType-${sampleCounter}" class="block text-sm font-medium text-gray-700 mb-2">Material Type:</label>
+                        <input type="text" id="materialType-${sampleCounter}" name="materialType-${sampleCounter}" placeholder="e.g., UO2, Zircaloy" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="experimentType-${sampleCounter}" class="block text-sm font-medium text-gray-700 mb-2">Experiment Type:</label>
+                        <input type="text" id="experimentType-${sampleCounter}" name="experimentType-${sampleCounter}" placeholder="e.g., Irradiation, Corrosion" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="weight-${sampleCounter}" class="block text-sm font-medium text-gray-700 mb-2">Weight (g):</label>
+                        <input type="number" step="0.001" id="weight-${sampleCounter}" name="weight-${sampleCounter}" placeholder="e.g., 1.5" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="dimensions-${sampleCounter}" class="block text-sm font-medium text-gray-700 mb-2">Dimensions (mm, optional):</label>
+                        <input type="text" id="dimensions-${sampleCounter}" name="dimensions-${sampleCounter}" placeholder="e.g., 10x10x1, 5 dia x 20 L">
+                    </div>
+                    <div class="form-group col-span-full">
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Composition (Elemental/Isotopic %):</label>
+                        <table class="composition-table">
+                            <thead>
+                                <tr>
+                                    <th>Element</th>
+                                    <th>Isotope</th>
+                                    <th>Percentage (%)</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                </tbody>
+                        </table>
+                        <button type="button" onclick="addCompositionRow(this)" class="mt-2 bg-gray-200 hover:bg-gray-300 text-gray-800 py-1 px-3 rounded-md text-sm">Add Element</button>
+                    </div>
+                    <div class="form-group col-span-full">
+                        <label for="specialInstructions-${sampleCounter}" class="block text-sm font-medium text-gray-700 mb-2">Special Instructions for this Sample:</label>
+                        <textarea id="specialInstructions-${sampleCounter}" name="specialInstructions-${sampleCounter}" rows="3" placeholder="Specific details for this sample..."></textarea>
+                    </div>
+                </div>
+            `;
+            container.appendChild(newBlock);
+            // Add one initial composition row for the new sample block
+            addCompositionRow(newBlock.querySelector('.composition-table button'));
+        }
+
+        // Function to remove a sample request block
+        function removeSampleRequest(blockId) {
+            document.getElementById(blockId).remove();
+        }
+
+        // Function to handle form submission
+        document.getElementById('sampleRequestForm').addEventListener('submit', async function(event) {
+            event.preventDefault();
+
+            const collaboratorName = document.getElementById('collaboratorName').value;
+            const collaboratorCompany = document.getElementById('collaboratorCompany').value;
+            const collaboratorEmail = document.getElementById('collaboratorEmail').value;
+            const collaboratorPhone = document.getElementById('collaboratorPhone').value;
+            const lotNumber = document.getElementById('lotNumber').value;
+            const generalSpecialInstructions = document.getElementById('generalSpecialInstructions').value;
+
+            const samples = [];
+            document.querySelectorAll('.sample-request-block').forEach(block => {
+                const blockId = block.id.split('-')[1];
+                const sampleId = document.getElementById(`sampleId-${blockId}`).value;
+                const materialType = document.getElementById(`materialType-${blockId}`).value;
+                const experimentType = document.getElementById(`experimentType-${blockId}`).value;
+                const weight = parseFloat(document.getElementById(`weight-${blockId}`).value);
+                const dimensions = document.getElementById(`dimensions-${blockId}`).value;
+                const specialInstructions = document.getElementById(`specialInstructions-${blockId}`).value;
+
+                const composition = [];
+                block.querySelectorAll('.composition-table tbody tr').forEach(row => {
+                    const element = row.querySelector('.element-select').value;
+                    const isotope = row.querySelector('.isotope-select').value;
+                    const percentage = parseFloat(row.querySelector('.percentage-input').value);
+                    if (element && percentage) {
+                        composition.push({ element, isotope, percentage });
+                    }
+                });
+
+                samples.push({
+                    sampleId,
+                    materialType,
+                    experimentType,
+                    weight,
+                    dimensions,
+                    composition,
+                    specialInstructions
+                });
+            });
+
+            const payload = {
+                action: 'recordSampleRequest',
+                payload: {
+                    collaboratorName,
+                    collaboratorCompany,
+                    collaboratorEmail,
+                    collaboratorPhone,
+                    lotNumber,
+                    generalSpecialInstructions,
+                    samples
+                }
+            };
+
+            try {
+                const response = await fetch(GS_WEB_APP_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(payload),
+                });
+                const result = await response.json();
+
+                if (result.success) {
+                    alert('Sample requests submitted successfully! You will receive an email confirmation.');
+                    document.getElementById('sampleRequestForm').reset();
+                    document.getElementById('sampleRequestsContainer').innerHTML = ''; // Clear dynamic blocks
+                    sampleCounter = 0; // Reset counter
+                    addSampleRequest(); // Add one sample block back
+                    renderTrackSamplesTable(); // Refresh tracking table
+                    renderViewDataTable(); // Refresh view data table
+                } else {
+                    alert('Error submitting sample requests: ' + result.error);
+                }
+            } catch (error) {
+                console.error('Error submitting form:', error);
+                alert('An error occurred while submitting your request. Please try again.');
+            }
+        });
+
+        // Function to render the Track Samples table
+        async function renderTrackSamplesTable() {
+            const tableBody = document.getElementById('sampleTrackingTableBody');
+            tableBody.innerHTML = '<tr><td colspan="7" class="text-center py-4">Loading tracking data...</td></tr>';
+
+            try {
+                const response = await fetch(GS_WEB_APP_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ action: 'getTrackSamplesData' }),
+                });
+                const result = await response.json();
+
+                if (result.success) {
+                    const data = result.data;
+                    tableBody.innerHTML = ''; // Clear loading message
+
+                    // Group data by Lot Number
+                    const groupedByLot = data.reduce((acc, item) => {
+                        (acc[item.lotNumber] = acc[item.lotNumber] || []).push(item);
+                        return acc;
+                    }, {});
+
+                    for (const lotNumber in groupedByLot) {
+                        const samplesInLot = groupedByLot[lotNumber];
+                        // Add a header row for the Lot Number
+                        const lotHeaderRow = document.createElement('tr');
+                        lotHeaderRow.innerHTML = `<td colspan="7" class="lot-header">${lotNumber} (Collaborator: ${samplesInLot[0].collaboratorName}, Email: ${samplesInLot[0].collaboratorEmail})</td>`;
+                        tableBody.appendChild(lotHeaderRow);
+
+                        samplesInLot.forEach(sample => {
+                            const row = document.createElement('tr');
+                            row.classList.add('tracking-input-row-dynamic');
+                            row.innerHTML = `
+                                <td class="py-2 px-4 border-b border-gray-200">${sample.sampleId}</td>
+                                <td class="py-2 px-4 border-b border-gray-200">${sample.material}</td>
+                                <td class="py-2 px-4 border-b border-gray-200">${sample.experimentType}</td>
+                                <td class="py-2 px-4 border-b border-gray-200">${sample.status}</td>
+                                <td class="py-2 px-4 border-b border-gray-200">${sample.approvalDate}</td>
+                                <td class="py-2 px-4 border-b border-gray-200">${sample.shippingInstructions}</td>
+                                <td class="py-2 px-4 border-b border-gray-200">
+                                    <input type="text" id="tracking-${sample.sampleId}" value="${sample.trackingNumber}" placeholder="Enter Tracking #" class="w-full p-2 border rounded-md text-sm">
+                                    <button type="button" onclick="addTrackingDetailsToSheet('${sample.sampleId}')" class="mt-2 mit-blue-bg hover:opacity-90 text-white py-1 px-3 rounded-md text-sm">Add Tracking Details</button>
+                                </td>
+                            `;
+                            tableBody.appendChild(row);
+                        });
+                    }
+                    if (data.length === 0) {
+                        tableBody.innerHTML = '<tr><td colspan="7" class="text-center py-4">No sample requests found.</td></tr>';
+                    }
+                } else {
+                    tableBody.innerHTML = `<tr><td colspan="7" class="text-center py-4 text-red-600">Error loading tracking data: ${result.error}</td></tr>`;
+                    console.error('Error loading tracking data:', result.error);
+                }
+            } catch (error) {
+                tableBody.innerHTML = `<tr><td colspan="7" class="text-center py-4 text-red-600">Failed to fetch tracking data.</td></tr>`;
+                console.error('Error fetching tracking data:', error);
+            }
+        }
+
+        // Function to send tracking details to GS
+        async function addTrackingDetailsToSheet(sampleId) {
+            const trackingNumber = document.getElementById(`tracking-${sampleId}`).value;
+            if (!trackingNumber) {
+                alert('Please enter a tracking number.');
+                return;
+            }
+
+            const payload = {
+                action: 'addTrackingDetails',
+                payload: {
+                    sampleId: sampleId,
+                    trackingNumber: trackingNumber
+                }
+            };
+
+            try {
+                const response = await fetch(GS_WEB_APP_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(payload),
+                });
+                const result = await response.json();
+
+                if (result.success) {
+                    alert(result.data);
+                    renderTrackSamplesTable(); // Refresh table to show updated data
+                } else {
+                    alert('Error updating tracking details: ' + result.error);
+                }
+            } catch (error) {
+                console.error('Error adding tracking details:', error);
+                alert('An error occurred while adding tracking details. Please try again.');
+            }
+        }
+
+        // Function to refresh the Track Samples table
+        function refreshTrackSamples() {
+            renderTrackSamplesTable();
+        }
+
+        // Function to render the View Sample Data table
+        async function renderViewDataTable() {
+            const tableBody = document.getElementById('sampleDataTableBody');
+            tableBody.innerHTML = '<tr><td colspan="5" class="text-center py-4">Loading sample data...</td></tr>';
+
+            try {
+                const response = await fetch(GS_WEB_APP_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ action: 'getViewData' }),
+                });
+                const result = await response.json();
+
+                if (result.success) {
+                    const data = result.data;
+                    tableBody.innerHTML = ''; // Clear loading message
+
+                    // Group data by Lot Number
+                    const groupedByLot = data.reduce((acc, item) => {
+                        (acc[item.lotNumber] = acc[item.lotNumber] || []).push(item);
+                        return acc;
+                    }, {});
+
+                    for (const lotNumber in groupedByLot) {
+                        const samplesInLot = groupedByLot[lotNumber];
+                        // Add a header row for the Lot Number
+                        const lotHeaderRow = document.createElement('tr');
+                        lotHeaderRow.innerHTML = `<td colspan="5" class="lot-header">${lotNumber} (Collaborator: ${samplesInLot[0].collaboratorName}, Email: ${samplesInLot[0].collaboratorEmail})</td>`;
+                        tableBody.appendChild(lotHeaderRow);
+
+                        samplesInLot.forEach(sample => {
+                            const row = document.createElement('tr');
+                            row.classList.add('lot-data-request-row-dynamic');
+                            row.innerHTML = `
+                                <td class="py-2 px-4 border-b border-gray-200">${sample.sampleId}</td>
+                                <td class="py-2 px-4 border-b border-gray-200">${sample.experimentType}</td>
+                                <td class="py-2 px-4 border-b border-gray-200">${sample.lastUpdatedDate}</td>
+                                <td class="py-2 px-4 border-b border-gray-200">
+                                    <button type="button" onclick="requestSampleDataFromSheet('${sample.sampleId}', 'Individual')" class="mit-blue-bg hover:opacity-90 text-white py-1 px-3 rounded-md text-sm">Request Data</button>
+                                </td>
+                                <td class="py-2 px-4 border-b border-gray-200">
+                                    ${sample.dataAvailable === 'Yes' ? `<a href="${sample.dataLink}" target="_blank" class="text-green-600 hover:underline">View Data</a>` : 'No'}
+                                </td>
+                            `;
+                            tableBody.appendChild(row);
+                        });
+                    }
+                    if (data.length === 0) {
+                        tableBody.innerHTML = '<tr><td colspan="5" class="text-center py-4">No sample data available.</td></tr>';
+                    }
+                } else {
+                    tableBody.innerHTML = `<tr><td colspan="5" class="text-center py-4 text-red-600">Error loading sample data: ${result.error}</td></tr>`;
+                    console.error('Error loading sample data:', result.error);
+                }
+            } catch (error) {
+                tableBody.innerHTML = `<tr><td colspan="5" class="text-center py-4 text-red-600">Failed to fetch sample data.</td></tr>`;
+                console.error('Error fetching sample data:', error);
+            }
+        }
+
+        // Function to send data request to GS
+        async function requestSampleDataFromSheet(sampleId, requestType) {
+            const payload = {
+                action: 'requestSampleData',
+                payload: {
+                    sampleId: sampleId,
+                    requestType: requestType // 'Individual' or 'Lot'
+                }
+            };
+
+            try {
+                const response = await fetch(GS_WEB_APP_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(payload),
+                });
+                const result = await response.json();
+
+                if (result.success) {
+                    alert(result.data);
+                    renderViewDataTable(); // Refresh table to show updated data
+                } else {
+                    alert('Error requesting sample data: ' + result.error);
+                }
+            } catch (error) {
+                console.error('Error requesting sample data:', error);
+                alert('An error occurred while requesting sample data. Please try again.');
+            }
+        }
+
+        // JavaScript for login functionality
         function handleLogin(event) {
             event.preventDefault();
             const username = document.getElementById('username').value;
             const password = document.getElementById('password').value;
             const loginError = document.getElementById('loginError');
 
+            // Simple hardcoded login for demonstration
             if (username === 'admin' && password === 'password123') {
                 document.getElementById('loginPage').classList.add('hidden');
                 document.getElementById('mainContent').classList.remove('hidden');
                 loginError.classList.add('hidden');
-                
-                // Initialize Google Sheet on successful login
-                google.script.run
-                    .withSuccessHandler(function(response) {
-                        console.log(response);
-                        showMessage(response, 'success');
-                        addSampleRequest(); // Initialize with one sample request block
-                        renderTrackSamplesTable(); // Render tables after login
-                        renderViewDataTable();
-                    })
-                    .withFailureHandler(function(error) {
-                        console.error("Error initializing Google Sheet:", error.message);
-                        showMessage("Failed to initialize system: " + error.message, 'error');
-                    })
-                    .initializeGoogleSheet();
+                initializeGoogleSheet(); // Initialize Google Sheet on login
+                // Initialize with one sample request block when the page loads
+                addSampleRequest(); // Ensure this is called only once after successful login
+                renderTrackSamplesTable(); // Render tables after login
+                renderViewDataTable();
             } else {
                 loginError.classList.remove('hidden');
             }
@@ -424,546 +804,7 @@
             document.getElementById(tabName).classList.remove("hidden");
             document.getElementById(tabName).classList.add("active");
             evt.currentTarget.classList.add("active");
-
-            // Refresh data when switching to tracking or view data tabs
-            if (tabName === 'trackSamples') {
-                renderTrackSamplesTable();
-            } else if (tabName === 'viewData') {
-                renderViewDataTable();
-            }
         }
-
-        // Function to add a new sample request block
-        function addSampleRequest() {
-            sampleCounter++;
-            const container = document.getElementById('sampleRequestsContainer');
-            const newBlock = document.createElement('div');
-            newBlock.id = `sampleBlock-${sampleCounter}`;
-            newBlock.classList.add('sample-request-block');
-            newBlock.innerHTML = `
-                <button type="button" class="remove-button" onclick="removeSampleRequest('sampleBlock-${sampleCounter}')">Remove</button>
-                <h3 class="text-xl font-semibold mb-4 mit-blue">Sample #${sampleCounter} Details</h3>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div class="form-group">
-                        <label for="sampleID-${sampleCounter}" class="block text-sm font-medium text-gray-700 mb-2">Sample ID (Unique):</label>
-                        <input type="text" id="sampleID-${sampleCounter}" name="sampleID" placeholder="e.g., LOT-2025-001-S001" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="materialType-${sampleCounter}" class="block text-sm font-medium text-gray-700 mb-2">Material Type:</label>
-                        <input type="text" id="materialType-${sampleCounter}" name="materialType" placeholder="e.g., Uranium Dioxide, Zirconium Alloy" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="materialForm-${sampleCounter}" class="block text-sm font-medium text-gray-700 mb-2">Material Form:</label>
-                        <select id="materialForm-${sampleCounter}" name="materialForm" required>
-                            <option value="">Select Form</option>
-                            <option value="Pellet">Pellet</option>
-                            <option value="Rod">Rod</option>
-                            <option value="Plate">Plate</option>
-                            <option value="Powder">Powder</option>
-                            <option value="Liquid">Liquid</option>
-                            <option value="Gas">Gas</option>
-                            <option value="Other">Other</option>
-                        </select>
-                    </div>
-                    <div class="form-group col-span-full">
-                        <label class="block text-sm font-medium text-gray-700 mb-2">Sample Dimensions (mm):</label>
-                        <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-                            <input type="number" id="length-${sampleCounter}" name="length" placeholder="Length" step="any">
-                            <input type="number" id="width-${sampleCounter}" name="width" placeholder="Width" step="any">
-                            <input type="number" id="thickness-${sampleCounter}" name="thickness" placeholder="Thickness" step="any">
-                            <input type="number" id="diameter-${sampleCounter}" name="diameter" placeholder="Diameter" step="any">
-                        </div>
-                        <p class="text-xs text-gray-500 mt-1">Leave blank if not applicable. Provide at least one relevant dimension.</p>
-                    </div>
-                    <div class="form-group">
-                        <label for="sampleMass-${sampleCounter}" class="block text-sm font-medium text-gray-700 mb-2">Sample Mass (g):</label>
-                        <input type="number" id="sampleMass-${sampleCounter}" name="sampleMass" placeholder="e.g., 10.5" step="any" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="purity-${sampleCounter}" class="block text-sm font-medium text-gray-700 mb-2">Purity (%):</label>
-                        <input type="number" id="purity-${sampleCounter}" name="purity" placeholder="e.g., 99.9" step="0.01" min="0" max="100">
-                    </div>
-                    <div class="form-group">
-                        <label for="enrichment-${sampleCounter}" class="block text-sm font-medium text-gray-700 mb-2">Enrichment (%):</label>
-                        <input type="number" id="enrichment-${sampleCounter}" name="enrichment" placeholder="e.g., 5.0 (for U-235)" step="0.01" min="0" max="100">
-                    </div>
-                    <div class="form-group col-span-full">
-                        <label class="block text-sm font-medium text-gray-700 mb-2">Composition (Element/Isotope and Percentage):</label>
-                        <table class="composition-table" id="compositionTable-${sampleCounter}">
-                            <thead>
-                                <tr>
-                                    <th>Element</th>
-                                    <th>Isotope</th>
-                                    <th>Percentage (%)</th>
-                                    <th>Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                </tbody>
-                        </table>
-                        <button type="button" onclick="addCompositionRow(${sampleCounter})" class="mt-2 mit-light-blue-bg text-mit-blue py-1 px-3 rounded-md text-sm hover:opacity-90">Add Element</button>
-                    </div>
-                    <div class="form-group">
-                        <label for="experimentType-${sampleCounter}" class="block text-sm font-medium text-gray-700 mb-2">Experiment Type:</label>
-                        <select id="experimentType-${sampleCounter}" name="experimentType" required>
-                            <option value="">Select Type</option>
-                            <option value="Irradiation">Irradiation</option>
-                            <option value="Post-Irradiation Examination (PIE)">Post-Irradiation Examination (PIE)</option>
-                            <option value="Material Characterization">Material Characterization</option>
-                            <option value="Corrosion Study">Corrosion Study</option>
-                            <option value="Thermal Properties">Thermal Properties</option>
-                            <option value="Mechanical Testing">Mechanical Testing</option>
-                            <option value="Other">Other</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="requestedIrradiationDose-${sampleCounter}" class="block text-sm font-medium text-gray-700 mb-2">Requested Irradiation Dose (dpa or n/cm²):</label>
-                        <input type="text" id="requestedIrradiationDose-${sampleCounter}" name="requestedIrradiationDose" placeholder="e.g., 10 dpa, 1e21 n/cm²">
-                    </div>
-                    <div class="form-group">
-                        <label for="requestedIrradiationTemperature-${sampleCounter}" class="block text-sm font-medium text-gray-700 mb-2">Requested Irradiation Temperature (°C):</label>
-                        <input type="number" id="requestedIrradiationTemperature-${sampleCounter}" name="requestedIrradiationTemperature" placeholder="e.g., 300" step="any">
-                    </div>
-                    <div class="form-group col-span-full">
-                        <label for="specialInstructions-${sampleCounter}" class="block text-sm font-medium text-gray-700 mb-2">Special Instructions for this Sample:</label>
-                        <textarea id="specialInstructions-${sampleCounter}" name="specialInstructions" rows="3" placeholder="Any specific details for this individual sample..."></textarea>
-                    </div>
-                </div>
-            `;
-            container.appendChild(newBlock);
-            addCompositionRow(sampleCounter); // Add an initial composition row
-            populateElementsDropdown(sampleCounter); // Populate element dropdown for the new block
-        }
-
-        // Function to remove a sample request block
-        function removeSampleRequest(blockId) {
-            const blockToRemove = document.getElementById(blockId);
-            if (blockToRemove) {
-                blockToRemove.remove();
-            }
-        }
-
-        // Function to populate elements dropdown
-        function populateElementsDropdown(sampleBlockIndex) {
-            const elementSelects = document.querySelectorAll(`#sampleBlock-${sampleBlockIndex} .element-select`);
-            elementSelects.forEach(select => {
-                if (select.options.length === 0 || select.options[0].value !== "") { // Prevent re-populating
-                    select.innerHTML = '<option value="">Select Element</option>';
-                    periodicElements.forEach(element => {
-                        const option = document.createElement('option');
-                        option.value = element.symbol;
-                        option.textContent = `${element.name} (${element.symbol})`;
-                        select.appendChild(option);
-                    });
-                }
-            });
-        }
-
-        // Function to update isotopes dropdown based on selected element
-        function updateIsotopes(selectElement) {
-            const isotopeSelect = selectElement.closest('tr').querySelector('.isotope-select');
-            const selectedSymbol = selectElement.value;
-            isotopeSelect.innerHTML = '<option value="">Select Isotope</option>';
-
-            if (selectedSymbol) {
-                const element = periodicElements.find(el => el.symbol === selectedSymbol);
-                if (element && element.isotopes) {
-                    element.isotopes.forEach(isotope => {
-                        const option = document.createElement('option');
-                        option.value = isotope;
-                        option.textContent = isotope;
-                        isotopeSelect.appendChild(option);
-                    });
-                }
-            }
-        }
-
-        // Function to add a new row to the composition table
-        function addCompositionRow(sampleBlockIndex) {
-            const tableBody = document.querySelector(`#compositionTable-${sampleBlockIndex} tbody`);
-            const newRow = tableBody.insertRow();
-            newRow.innerHTML = `
-                <td>
-                    <select class="element-select" onchange="updateIsotopes(this)">
-                        <option value="">Select Element</option>
-                    </select>
-                </td>
-                <td>
-                    <select class="isotope-select">
-                        <option value="">Select Isotope</option>
-                    </select>
-                </td>
-                <td><input type="number" class="percentage-input" placeholder="e.g., 50.0" step="0.01" min="0" max="100"></td>
-                <td><button type="button" onclick="removeCompositionRow(this)" class="text-red-500 hover:text-red-700 text-sm">Remove</button></td>
-            `;
-            populateElementsDropdown(sampleBlockIndex); // Populate for the newly added row
-        }
-
-        // Function to remove a row from the composition table
-        function removeCompositionRow(button) {
-            const row = button.closest('tr');
-            row.remove();
-        }
-
-        // Handle form submission for sample requests
-        document.getElementById('sampleRequestForm').addEventListener('submit', async function(event) {
-            event.preventDefault();
-            showMessage("Submitting request...", 'info');
-
-            const collaboratorName = document.getElementById('collaboratorName').value;
-            const collaboratorCompany = document.getElementById('collaboratorCompany').value;
-            const collaboratorEmail = document.getElementById('collaboratorEmail').value;
-            const collaboratorPhone = document.getElementById('collaboratorPhone').value;
-            const lotNumber = document.getElementById('lotNumber').value;
-            const generalSpecialInstructions = document.getElementById('generalSpecialInstructions').value;
-
-            const samples = [];
-            const sampleBlocks = document.querySelectorAll('.sample-request-block');
-
-            // Validate Lot Number uniqueness (client-side check for immediate feedback)
-            // This is a basic check, server-side validation would be more robust.
-            // For now, we'll assume the GS backend will handle potential duplicates gracefully or append.
-            // If strict uniqueness is required, GS would need to check existing lot numbers.
-
-            for (const block of sampleBlocks) {
-                const sampleID = block.querySelector('[name="sampleID"]').value;
-                const materialType = block.querySelector('[name="materialType"]').value;
-                const materialForm = block.querySelector('[name="materialForm"]').value;
-                const length = block.querySelector('[name="length"]').value;
-                const width = block.querySelector('[name="width"]').value;
-                const thickness = block.querySelector('[name="thickness"]').value;
-                const diameter = block.querySelector('[name="diameter"]').value;
-                const sampleMass = block.querySelector('[name="sampleMass"]').value;
-                const purity = block.querySelector('[name="purity"]').value;
-                const enrichment = block.querySelector('[name="enrichment"]').value;
-                const experimentType = block.querySelector('[name="experimentType"]').value;
-                const requestedIrradiationDose = block.querySelector('[name="requestedIrradiationDose"]').value;
-                const requestedIrradiationTemperature = block.querySelector('[name="requestedIrradiationTemperature"]').value;
-                const specialInstructions = block.querySelector('[name="specialInstructions"]').value;
-
-                const composition = [];
-                const compositionRows = block.querySelectorAll('.composition-table tbody tr');
-                compositionRows.forEach(row => {
-                    const element = row.querySelector('.element-select').value;
-                    const isotope = row.querySelector('.isotope-select').value;
-                    const percentage = row.querySelector('.percentage-input').value;
-                    if (element && percentage) { // Only add if element and percentage are provided
-                        composition.push({ element, isotope, percentage: parseFloat(percentage) });
-                    }
-                });
-
-                samples.push({
-                    sampleID,
-                    materialType,
-                    materialForm,
-                    sampleDimensions: {
-                        length: length ? parseFloat(length) : null,
-                        width: width ? parseFloat(width) : null,
-                        thickness: thickness ? parseFloat(thickness) : null,
-                        diameter: diameter ? parseFloat(diameter) : null,
-                    },
-                    sampleMass: parseFloat(sampleMass),
-                    purity: purity ? parseFloat(purity) : null,
-                    enrichment: enrichment ? parseFloat(enrichment) : null,
-                    composition,
-                    experimentType,
-                    requestedIrradiationDose,
-                    requestedIrradiationTemperature: requestedIrradiationTemperature ? parseFloat(requestedIrradiationTemperature) : null,
-                    specialInstructions
-                });
-            }
-
-            const formData = {
-                collaboratorName,
-                collaboratorCompany,
-                collaboratorEmail,
-                collaboratorPhone,
-                lotNumber,
-                generalSpecialInstructions,
-                samples
-            };
-
-            try {
-                // Use google.script.run to call the GS function
-                google.script.run
-                    .withSuccessHandler(function(response) {
-                        showMessage(response, 'success');
-                        document.getElementById('sampleRequestForm').reset(); // Clear form
-                        document.getElementById('sampleRequestsContainer').innerHTML = ''; // Clear dynamic blocks
-                        addSampleRequest(); // Add one empty block back
-                        renderTrackSamplesTable(); // Refresh tracking table
-                        renderViewDataTable(); // Refresh view data table
-                    })
-                    .withFailureHandler(function(error) {
-                        console.error("Error submitting request:", error.message);
-                        showMessage("Error submitting request: " + error.message, 'error');
-                    })
-                    .submitRequest(formData); // Call the GS function
-            } catch (error) {
-                console.error("Client-side error during submission:", error);
-                showMessage("An unexpected client-side error occurred.", 'error');
-            }
-        });
-
-        // Function to render the Track Samples table
-        async function renderTrackSamplesTable() {
-            const tableBody = document.getElementById('sampleTrackingTableBody');
-            tableBody.innerHTML = '<tr><td colspan="7" class="text-center py-4 text-gray-500">Loading tracking data...</td></tr>';
-
-            try {
-                const data = await new Promise((resolve, reject) => {
-                    google.script.run
-                        .withSuccessHandler(resolve)
-                        .withFailureHandler(reject)
-                        .getSampleTrackingData();
-                });
-
-                tableBody.innerHTML = ''; // Clear loading message
-
-                if (data.length <= 1) { // Only headers or no data
-                    tableBody.innerHTML = '<tr><td colspan="7" class="text-center py-4 text-gray-500">No sample requests to track yet.</td></tr>';
-                    return;
-                }
-
-                // Group samples by Lot Number
-                const groupedByLot = {};
-                // Skip header row (index 0)
-                for (let i = 1; i < data.length; i++) {
-                    const row = data[i];
-                    const lotNumber = row[0]; // Lot Number
-                    if (!groupedByLot[lotNumber]) {
-                        groupedByLot[lotNumber] = [];
-                    }
-                    groupedByLot[lotNumber].push(row);
-                }
-
-                for (const lotNumber in groupedByLot) {
-                    const samplesInLot = groupedByLot[lotNumber];
-
-                    // Add a header row for the Lot Number
-                    const lotHeaderRow = tableBody.insertRow();
-                    lotHeaderRow.classList.add('lot-header');
-                    const lotHeaderCell = lotHeaderRow.insertCell(0);
-                    lotHeaderCell.colSpan = 7;
-                    lotHeaderCell.textContent = `Lot Number: ${lotNumber}`;
-
-                    samplesInLot.forEach(sample => {
-                        const row = tableBody.insertRow();
-                        row.classList.add('tracking-input-row-dynamic'); // Apply dynamic row styling
-
-                        const sampleID = sample[1]; // Sample ID
-                        const material = sample[2]; // Material
-                        const experimentType = sample[3]; // Experiment Type
-                        const status = sample[4]; // Status
-                        const approvalDate = sample[5] ? new Date(sample[5]).toLocaleDateString() : 'N/A'; // Approval Date
-                        const shippingInstructions = sample[6] || 'N/A'; // Shipping Instructions
-                        const trackingNumber = sample[7] || ''; // Tracking Number
-
-                        row.insertCell(0).textContent = sampleID;
-                        row.insertCell(1).textContent = material;
-                        row.insertCell(2).textContent = experimentType;
-                        row.insertCell(3).textContent = status;
-                        row.insertCell(4).textContent = approvalDate;
-                        row.insertCell(5).textContent = shippingInstructions;
-
-                        const trackingCell = row.insertCell(6);
-                        if (status === 'Approved' && !trackingNumber) { // Only show input if approved and no tracking yet
-                            trackingCell.innerHTML = `
-                                <div class="flex items-center space-x-2">
-                                    <input type="text" id="trackingInput-${sampleID}" placeholder="Enter Tracking #" class="p-2 border rounded-md text-sm w-full">
-                                    <button type="button" onclick="addTrackingDetails('${lotNumber}', '${sampleID}')"
-                                            class="mit-blue-bg hover:opacity-90 text-white py-2 px-3 rounded-md text-sm">
-                                        Add
-                                    </button>
-                                </div>
-                            `;
-                        } else {
-                            trackingCell.textContent = trackingNumber || 'Pending';
-                        }
-                    });
-                }
-            } catch (error) {
-                console.error("Error fetching tracking data:", error.message);
-                showMessage("Error loading tracking data: " + error.message, 'error');
-                tableBody.innerHTML = '<tr><td colspan="7" class="text-center py-4 text-red-500">Failed to load data. Please try again.</td></tr>';
-            }
-        }
-
-        // Function to add tracking details (called from table)
-        async function addTrackingDetails(lotNumber, sampleID) {
-            const trackingInput = document.getElementById(`trackingInput-${sampleID}`);
-            const trackingNumber = trackingInput.value.trim();
-            if (!trackingNumber) {
-                showMessage("Please enter a tracking number.", 'error');
-                return;
-            }
-
-            showMessage("Adding tracking details...", 'info');
-
-            // Get collaborator email from the form (assuming it's still available or fetched)
-            const collaboratorEmail = document.getElementById('collaboratorEmail').value;
-            const collaboratorName = document.getElementById('collaboratorName').value;
-
-            const dataToSend = {
-                lotNumber: lotNumber,
-                sampleID: sampleID,
-                trackingNumber: trackingNumber,
-                collaboratorEmail: collaboratorEmail,
-                collaboratorName: collaboratorName
-            };
-
-            try {
-                await new Promise((resolve, reject) => {
-                    google.script.run
-                        .withSuccessHandler(resolve)
-                        .withFailureHandler(reject)
-                        .addTrackingDetails(dataToSend);
-                });
-                showMessage("Tracking details added successfully!", 'success');
-                renderTrackSamplesTable(); // Refresh table to show updated status
-            } catch (error) {
-                console.error("Error adding tracking details:", error.message);
-                showMessage("Error adding tracking details: " + error.message, 'error');
-            }
-        }
-
-        // Function to refresh track samples table
-        function refreshTrackSamples() {
-            renderTrackSamplesTable();
-            showMessage("Tracking data refreshed.", 'info');
-        }
-
-        // Function to render the View Sample Data table
-        async function renderViewDataTable() {
-            const tableBody = document.getElementById('sampleDataTableBody');
-            tableBody.innerHTML = '<tr><td colspan="5" class="text-center py-4 text-gray-500">Loading sample data...</td></tr>';
-
-            try {
-                const data = await new Promise((resolve, reject) => {
-                    google.script.run
-                        .withSuccessHandler(resolve)
-                        .withFailureHandler(reject)
-                        .getSampleData();
-                });
-
-                tableBody.innerHTML = ''; // Clear loading message
-
-                if (data.length <= 1) { // Only headers or no data
-                    tableBody.innerHTML = '<tr><td colspan="5" class="text-center py-4 text-gray-500">No sample data available yet.</td></tr>';
-                    return;
-                }
-
-                // Group samples by Lot Number
-                const groupedByLot = {};
-                // Skip header row (index 0)
-                for (let i = 1; i < data.length; i++) {
-                    const row = data[i];
-                    const lotNumber = row[0]; // Lot Number
-                    if (!groupedByLot[lotNumber]) {
-                        groupedByLot[lotNumber] = [];
-                    }
-                    groupedByLot[lotNumber].push(row);
-                }
-
-                for (const lotNumber in groupedByLot) {
-                    const samplesInLot = groupedByLot[lotNumber];
-
-                    // Add a header row for the Lot Number
-                    const lotHeaderRow = tableBody.insertRow();
-                    lotHeaderRow.classList.add('lot-header');
-                    const lotHeaderCell = lotHeaderRow.insertCell(0);
-                    lotHeaderCell.colSpan = 5;
-                    lotHeaderCell.textContent = `Lot Number: ${lotNumber}`;
-
-                    samplesInLot.forEach(sample => {
-                        const row = tableBody.insertRow();
-                        row.classList.add('lot-data-request-row-dynamic'); // Apply dynamic row styling
-
-                        const sampleID = sample[1]; // Sample ID
-                        const experimentType = sample[2]; // Experiment Type
-                        const lastUpdatedDate = sample[3] ? new Date(sample[3]).toLocaleDateString() : 'N/A'; // Last Updated Date
-                        const dataAvailableLink = sample[4] || 'N/A'; // Data Available Link
-
-                        row.insertCell(0).textContent = sampleID;
-                        row.insertCell(1).textContent = experimentType;
-                        row.insertCell(2).textContent = lastUpdatedDate;
-
-                        const requestDataCell = row.insertCell(3);
-                        requestDataCell.innerHTML = `
-                            <button type="button" onclick="requestSampleData('${lotNumber}', '${sampleID}')"
-                                    class="mit-blue-bg hover:opacity-90 text-white py-2 px-3 rounded-md text-sm">
-                                Request
-                            </button>
-                        `;
-
-                        const dataLinkCell = row.insertCell(4);
-                        if (dataAvailableLink !== 'N/A') {
-                            dataLinkCell.innerHTML = `<a href="${dataAvailableLink}" target="_blank" class="text-blue-600 hover:underline">View Data</a>`;
-                        } else {
-                            dataLinkCell.textContent = 'N/A';
-                        }
-                    });
-
-                    // Add a row for requesting data for the entire lot
-                    const requestLotDataRow = tableBody.insertRow();
-                    requestLotDataRow.classList.add('bg-gray-100');
-                    const requestLotDataCell = requestLotDataRow.insertCell(0);
-                    requestLotDataCell.colSpan = 3;
-                    requestLotDataCell.textContent = `Request data for entire Lot ${lotNumber}:`;
-                    const requestLotButtonCell = requestLotDataRow.insertCell(1);
-                    requestLotButtonCell.colSpan = 2;
-                    requestLotButtonCell.innerHTML = `
-                        <button type="button" onclick="requestSampleData('${lotNumber}', null)"
-                                class="mit-orange-bg hover:opacity-90 text-white py-2 px-4 rounded-md text-sm">
-                            Request All Data for Lot
-                        </button>
-                    `;
-                }
-            } catch (error) {
-                console.error("Error fetching sample data:", error.message);
-                showMessage("Error loading sample data: " + error.message, 'error');
-                tableBody.innerHTML = '<tr><td colspan="5" class="text-center py-4 text-red-500">Failed to load data. Please try again.</td></tr>';
-            }
-        }
-
-        // Function to request sample data (for individual sample or entire lot)
-        async function requestSampleData(lotNumber, sampleID = null) {
-            showMessage("Requesting data...", 'info');
-
-            const collaboratorEmail = document.getElementById('collaboratorEmail').value;
-            const collaboratorName = document.getElementById('collaboratorName').value;
-
-            const dataToSend = {
-                lotNumber: lotNumber,
-                sampleID: sampleID,
-                collaboratorEmail: collaboratorEmail,
-                collaboratorName: collaboratorName
-            };
-
-            try {
-                await new Promise((resolve, reject) => {
-                    google.script.run
-                        .withSuccessHandler(resolve)
-                        .withFailureHandler(reject)
-                        .requestData(dataToSend);
-                });
-                showMessage("Data request sent successfully! You will receive an email if new updates are made.", 'success');
-                renderViewDataTable(); // Refresh table to show updated status
-            } catch (error) {
-                console.error("Error requesting data:", error.message);
-                showMessage("Error requesting data: " + error.message, 'error');
-            }
-        }
-
-        // Initial calls on page load (after login)
-        window.onload = function() {
-            // The initial addSampleRequest, renderTrackSamplesTable, and renderViewDataTable
-            // are now called within handleLogin's success handler.
-            // This ensures the Google Sheet is initialized first.
-        };
-
-        // Ensure at least one sample request block is present initially
-        // This is now handled in handleLogin after GS init.
     </script>
 </body>
 </html>
