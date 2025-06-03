@@ -327,7 +327,7 @@
         let sampleCounter = 0; // Global counter for unique sample block IDs
         const ADMIN_EMAIL = 'arunmdm@mit.edu'; // Admin email for notifications
         // IMPORTANT: Replace this with your deployed Google Apps Script Web App URL
-        const GOOGLE_SHEET_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbw6JPbYWzTcvmldl7b6U9dTboZbxMaMt1cjc15eGzuxZ694uIDtMUKAFtH712h0tmd_/exec'; // *** REPLACE THIS ***
+        const GOOGLE_SHEET_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbyz-mVADSWapyfUbzaifirk8mEFC3QD4kp7mJLVYb40iChNeWrRl1M8vTSD9rGxYifN/exec'; // *** REPLACE THIS ***
 
         // Data for periodic table elements and their isotopes
         const periodicElements = [
@@ -475,11 +475,11 @@
                 const response = await fetch(GOOGLE_SHEET_WEB_APP_URL, {
                     method: 'POST',
                     headers: {
-                        'Content-Type': 'application/x-www-form-urlencoded',
+                        'Content-Type': 'application/json', // Changed to application/json
                     },
-                    body: new URLSearchParams({
+                    body: JSON.stringify({ // Send action and data as a JSON object
                         action: 'initialize',
-                        data: JSON.stringify({}) // No specific data needed for initialization
+                        data: {} // No specific data needed for initialization
                     })
                 });
                 const result = await response.json();
@@ -743,11 +743,11 @@
                 const response = await fetch(GOOGLE_SHEET_WEB_APP_URL, {
                     method: 'POST',
                     headers: {
-                        'Content-Type': 'application/x-www-form-urlencoded',
+                        'Content-Type': 'application/json', // Changed to application/json
                     },
-                    body: new URLSearchParams({
+                    body: JSON.stringify({ // Send action and data as a JSON object
                         action: 'submitSampleRequest',
-                        data: JSON.stringify(formData)
+                        data: formData
                     })
                 });
                 const result = await response.json();
@@ -777,11 +777,11 @@
                 const response = await fetch(GOOGLE_SHEET_WEB_APP_URL, {
                     method: 'POST',
                     headers: {
-                        'Content-Type': 'application/x-www-form-urlencoded',
+                        'Content-Type': 'application/json', // Changed to application/json
                     },
-                    body: new URLSearchParams({
+                    body: JSON.stringify({ // Send action and data as a JSON object
                         action: 'getSampleRequests', // Get all requests to show status
-                        data: JSON.stringify({})
+                        data: {}
                     })
                 });
                 const result = await response.json();
@@ -792,11 +792,11 @@
                     const trackingResponse = await fetch(GOOGLE_SHEET_WEB_APP_URL, {
                         method: 'POST',
                         headers: {
-                            'Content-Type': 'application/x-www-form-urlencoded',
+                            'Content-Type': 'application/json', // Changed to application/json
                         },
-                        body: new URLSearchParams({
+                        body: JSON.stringify({ // Send action and data as a JSON object
                             action: 'getSampleTracking', // Get tracking numbers
-                            data: JSON.stringify({})
+                            data: {}
                         })
                     });
                     const trackingResult = await trackingResponse.json();
@@ -883,11 +883,11 @@
                 const response = await fetch(GOOGLE_SHEET_WEB_APP_URL, {
                     method: 'POST',
                     headers: {
-                        'Content-Type': 'application/x-www-form-urlencoded',
+                        'Content-Type': 'application/json', // Changed to application/json
                     },
-                    body: new URLSearchParams({
+                    body: JSON.stringify({ // Send action and data as a JSON object
                         action: 'addTrackingDetails',
-                        data: JSON.stringify(trackingData)
+                        data: trackingData
                     })
                 });
                 const result = await response.json();
@@ -914,11 +914,11 @@
                 const requestsResponse = await fetch(GOOGLE_SHEET_WEB_APP_URL, {
                     method: 'POST',
                     headers: {
-                        'Content-Type': 'application/x-www-form-urlencoded',
+                        'Content-Type': 'application/json', // Changed to application/json
                     },
-                    body: new URLSearchParams({
+                    body: JSON.stringify({ // Send action and data as a JSON object
                         action: 'getSampleRequests',
-                        data: JSON.stringify({})
+                        data: {}
                     })
                 });
                 const requestsResult = await requestsResponse.json();
@@ -927,11 +927,11 @@
                 const dataResponse = await fetch(GOOGLE_SHEET_WEB_APP_URL, {
                     method: 'POST',
                     headers: {
-                        'Content-Type': 'application/x-www-form-urlencoded',
+                        'Content-Type': 'application/json', // Changed to application/json
                     },
-                    body: new URLSearchParams({
+                    body: JSON.stringify({ // Send action and data as a JSON object
                         action: 'getSampleData',
-                        data: JSON.stringify({})
+                        data: {}
                     })
                 });
                 const dataResult = await dataResponse.json();
@@ -1005,11 +1005,11 @@
                 const response = await fetch(GOOGLE_SHEET_WEB_APP_URL, {
                     method: 'POST',
                     headers: {
-                        'Content-Type': 'application/x-www-form-urlencoded',
+                        'Content-Type': 'application/json', // Changed to application/json
                     },
-                    body: new URLSearchParams({
+                    body: JSON.stringify({ // Send action and data as a JSON object
                         action: 'requestData',
-                        data: JSON.stringify(requestDataPayload)
+                        data: requestDataPayload
                     })
                 });
                 const result = await response.json();
